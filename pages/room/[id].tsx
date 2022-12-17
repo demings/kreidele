@@ -28,9 +28,17 @@ export default function RoomPage({ id }: { id: string }) {
       >
         <ClientSideSuspense fallback={<Loading />}>
           {() => (
-            <div className="grid grid-cols-2 gap-2 flex justify-center items-center max-w-md">
-              <LiveAvatars />
-              <Canvas />
+            <div className="grid h-screen place-items-center">
+              <div className="shadow-md grid grid-rows-flow">
+                <LiveAvatars />
+                <Canvas />
+                <input
+                  className="shadow-sm rounded-b-md border w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="guess"
+                  type="text"
+                  placeholder="Atspėk žodį..."
+                />
+              </div>
             </div>
           )}
         </ClientSideSuspense>
