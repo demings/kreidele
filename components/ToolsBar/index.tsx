@@ -1,4 +1,4 @@
-import { CanvasMode, CanvasState, LayerType } from "../../../shared/types";
+import { CanvasMode, CanvasState, LayerType } from "../../shared/types";
 import EllipseButton from "./EllipseButton";
 import PencilButton from "./PencilButton";
 import RectangleButton from "./RectangleButton";

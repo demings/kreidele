@@ -1,10 +1,7 @@
 import { shallow } from "@liveblocks/client";
 import React from "react";
-import {
-  useOthersConnectionIds,
-  useOthersMapped,
-} from "../../liveblocks.config";
-import { colorToCss } from "../../shared/utils";
+import { useOthersConnectionIds, useOthersMapped } from "../liveblocks.config";
+import { colorToCss } from "../shared/utils";
 import Cursor from "./Cursor";
 import Path from "./Path";
 

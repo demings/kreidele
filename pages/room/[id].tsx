@@ -1,10 +1,10 @@
 import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
+import { Canvas } from "../../components/Room/Canvas";
 import { LiveAvatars } from "../../components/Room/LiveAvatars";
 import { RoomProvider } from "../../liveblocks.config";
 import { Layer } from "../../shared/types";
-import { Canvas } from "../../src/components/Room/Canvas";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: { id: context.query.id } };

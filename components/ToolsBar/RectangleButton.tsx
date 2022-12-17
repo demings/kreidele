@@ -1,4 +1,3 @@
-import React from "react";
 import IconButton from "../IconButton";
 
 type Props = {
@@ -6,11 +5,16 @@ type Props = {
   onClick: () => void;
 };
 
-export default function SelectionButton({ isActive, onClick }: Props) {
+export default function RectangleButton({ isActive, onClick }: Props) {
   return (
     <IconButton isActive={isActive} onClick={onClick}>
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M13 26V9L25 21.1428H18.2189L13 26Z" fill="currentColor" />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M24 12H12V24H24V12ZM10 10V26H26V10H10Z"
+          fill="currentColor"
+        />
       </svg>
     </IconButton>
   );

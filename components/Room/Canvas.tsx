@@ -1,7 +1,7 @@
 import { LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import useDeleteLayers from "../../../hooks/useDeleteLayers";
+import useDeleteLayers from "../../hooks/useDeleteLayers";
 import {
   useCanRedo,
   useCanUndo,
@@ -10,7 +10,7 @@ import {
   useOthersMapped,
   useSelf,
   useStorage,
-} from "../../../liveblocks.config";
+} from "../../liveblocks.config";
 import {
   Camera,
   CanvasMode,
@@ -20,7 +20,7 @@ import {
   Point,
   Side,
   XYWH,
-} from "../../../shared/types";
+} from "../../shared/types";
 import {
   colorToCss,
   connectionIdToColor,
@@ -28,7 +28,7 @@ import {
   penPointsToPathLayer,
   pointerEventToCanvasPoint,
   resizeBounds,
-} from "../../../shared/utils";
+} from "../../shared/utils";
 import LayerComponent from "../LayerComponent";
 import MultiplayerGuides from "../MultiplayerGuides";
 import Path from "../Path";
