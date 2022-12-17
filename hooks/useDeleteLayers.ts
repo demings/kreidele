@@ -1,4 +1,4 @@
-import { useSelf, useMutation } from "../../liveblocks.config";
+import { useMutation, useSelf } from "../liveblocks.config";
 
 /**
  * Delete all the selected layers.

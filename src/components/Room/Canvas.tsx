@@ -1,6 +1,7 @@
 import { LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import useDeleteLayers from "../../../hooks/useDeleteLayers";
 import {
   useCanRedo,
   useCanUndo,
@@ -10,7 +11,6 @@ import {
   useSelf,
   useStorage,
 } from "../../../liveblocks.config";
-import useDeleteLayers from "../../hooks/useDeleteLayers";
 import {
   Camera,
   CanvasMode,

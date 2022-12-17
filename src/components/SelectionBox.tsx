@@ -1,5 +1,5 @@
 import { memo } from "react";
-import useSelectionBounds from "../hooks/useSelectionBounds";
+import useSelectionBounds from "../../hooks/useSelectionBounds";
 import { useSelf, useStorage } from "../../liveblocks.config";
 import { LayerType, Side, XYWH } from "../types";
 
