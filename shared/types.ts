@@ -4,6 +4,11 @@ export type Color = {
   b: number;
 };
 
+export type UserInfoCookie = {
+  username: string;
+  avatarUrl: string;
+};
+
 export enum LayerType {
   Rectangle,
   Ellipse,

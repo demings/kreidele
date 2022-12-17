@@ -5,6 +5,7 @@ import { useState } from "react";
 import logoPic from "../public/images/logo.png";
 import { Room } from "../shared/types";
 
+import { UserInfoCookie } from "../shared/types";
 import AvatarSelection, {
   generateRandomAvatarUrl,
 } from "../src/components/AvatarSelection";
@@ -17,9 +18,11 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
 
   console.log(rooms);
   const play = () => {
-    setCookie("avatar", avatarUrl);
-    setCookie("room", selectedRoom);
-    setCookie("username", username);
+    const userInfoCookie: UserInfoCookie = {
+      avatarUrl,
+      username,
+    };
+    setCookie("user", userInfoCookie);
     router.push(`room/${selectedRoom}`);
   };
 
@@ -62,7 +65,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                 <button
                   className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
                   onClick={() => {
-                    createRoom();
+                    // createRoom();
                   }}
                 >
                   SUKURTI KAMBARĮ
