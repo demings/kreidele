@@ -1,28 +1,37 @@
-import {
-  useMutation,
-  RoomProvider,
-  useHistory,
-  useStorage,
-  useSelf,
-  useOthersMapped,
-  useCanUndo,
-  useCanRedo,
-} from "../liveblocks.config";
-import { ClientSideSuspense } from "@liveblocks/react";
 import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
+import { ClientSideSuspense } from "@liveblocks/react";
+import { nanoid } from "nanoid";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  RoomProvider,
+  useCanRedo,
+  useCanUndo,
+  useHistory,
+  useMutation,
+  useOthersMapped,
+  useSelf,
+  useStorage,
+} from "../liveblocks.config";
+import LayerComponent from "./components/LayerComponent";
+import MultiplayerGuides from "./components/MultiplayerGuides";
+import Path from "./components/Path";
+import SelectionBox from "./components/SelectionBox";
+import SelectionTools from "./components/SelectionTools";
+import ToolsBar from "./components/ToolsBar";
+import useDeleteLayers from "./hooks/useDeleteLayers";
+import useDisableScrollBounce from "./hooks/useDisableScrollBounce";
+import styles from "./index.module.css";
+import {
+  Camera,
+  CanvasMode,
+  CanvasState,
   Color,
   Layer,
   LayerType,
-  CanvasState,
-  CanvasMode,
-  Camera,
+  Point,
   Side,
   XYWH,
-  Point,
 } from "./types";
-import styles from "./index.module.css";
 import {
   colorToCss,
   connectionIdToColor,
@@ -31,22 +40,10 @@ import {
   pointerEventToCanvasPoint,
   resizeBounds,
 } from "./utils";
-import SelectionBox from "./components/SelectionBox";
-import { nanoid } from "nanoid";
-import { useRouter } from "next/router";
-import LayerComponent from "./components/LayerComponent";
-import SelectionTools from "./components/SelectionTools";
-import useDisableScrollBounce from "./hooks/useDisableScrollBounce";
-import useDeleteLayers from "./hooks/useDeleteLayers";
-import MultiplayerGuides from "./components/MultiplayerGuides";
-import Path from "./components/Path";
-import ToolsBar from "./components/ToolsBar";
 
 const MAX_LAYERS = 100;
 
-export default function Room() {
-  const roomId = useOverrideRoomId("nextjs-whiteboard-advanced");
-
+export default function Whiteboard({ roomId }: { roomId: string }) {
   return (
     <RoomProvider
       id={roomId}
@@ -557,17 +554,4 @@ function Canvas() {
       />
     </>
   );
-}
-
-/**
- * This function is used when deploying an example on liveblocks.io.
- * You can ignore it completely if you run the example locally.
- */
-function useOverrideRoomId(roomId: string) {
-  const { query } = useRouter();
-  const overrideRoomId = useMemo(() => {
-    return query?.roomId ? `${roomId}-${query.roomId}` : roomId;
-  }, [query, roomId]);
-
-  return overrideRoomId;
 }
