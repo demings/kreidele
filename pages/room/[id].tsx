@@ -1,14 +1,46 @@
+import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
+import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
-import Whiteboard from "../../src";
+import { RoomProvider } from "../../liveblocks.config";
+import { Canvas } from "../../src/components/Room/Canvas";
+import { Layer } from "../../src/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: { id: context.query.id } };
 };
 
-export default function Room({ id }: { id: string }) {
+export default function RoomPage({ id }: { id: string }) {
   return (
     <>
-      <Whiteboard roomId={id} />
+      <RoomProvider
+        id={id}
+        initialPresence={{
+          selection: [],
+          cursor: null,
+          pencilDraft: null,
+          penColor: null,
+        }}
+        initialStorage={{
+          layers: new LiveMap<string, LiveObject<Layer>>(),
+          layerIds: new LiveList(),
+        }}
+      >
+        <ClientSideSuspense fallback={<Loading />}>
+          {() => <Canvas />}
+        </ClientSideSuspense>
+      </RoomProvider>
     </>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="absolute w-screen h-screen flex place-content-center place-items-center bg-slate-50">
+      <img
+        className="w-16 h-16 opacity-20"
+        src="https://liveblocks.io/loading.svg"
+        alt="Loading"
+      />
+    </div>
   );
 }
