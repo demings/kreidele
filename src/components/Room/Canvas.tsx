@@ -11,7 +11,6 @@ import {
   useStorage,
 } from "../../../liveblocks.config";
 import useDeleteLayers from "../../hooks/useDeleteLayers";
-import useDisableScrollBounce from "../../hooks/useDisableScrollBounce";
 import {
   Camera,
   CanvasMode,
@@ -55,8 +54,6 @@ export function Canvas() {
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
-
-  useDisableScrollBounce();
 
   const deleteLayers = useDeleteLayers();
 
