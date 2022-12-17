@@ -22,7 +22,6 @@ import {
   XYWH,
   Point,
 } from "./types";
-import styles from "./index.module.css";
 import {
   colorToCss,
   connectionIdToColor,
@@ -36,7 +35,6 @@ import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import LayerComponent from "./components/LayerComponent";
 import SelectionTools from "./components/SelectionTools";
-import useDisableScrollBounce from "./hooks/useDisableScrollBounce";
 import useDeleteLayers from "./hooks/useDeleteLayers";
 import MultiplayerGuides from "./components/MultiplayerGuides";
 import Path from "./components/Path";
@@ -61,7 +59,7 @@ export default function Room() {
         layerIds: new LiveList(),
       }}
     >
-      <div className={styles.container}>
+      <div>
         <ClientSideSuspense fallback={<Loading />}>
           {() => <Canvas />}
         </ClientSideSuspense>
@@ -72,10 +70,12 @@ export default function Room() {
 
 function Loading() {
   return (
-    <div className={styles.container}>
-      <div className={styles.loading}>
-        <img src="https://liveblocks.io/loading.svg" alt="Loading" />
-      </div>
+    <div className="absolute w-screen h-screen flex place-content-center place-items-center bg-white">
+      <img
+        className="w-16 h-16 opacity-20"
+        src="https://liveblocks.io/loading.svg"
+        alt="Loading"
+      />
     </div>
   );
 }
@@ -96,8 +96,6 @@ function Canvas() {
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
-
-  useDisableScrollBounce();
 
   const deleteLayers = useDeleteLayers();
 
@@ -482,7 +480,14 @@ function Canvas() {
 
   return (
     <>
-      <div className={styles.canvas}>
+      {/**
+      https://stackoverflow.com/questions/48124372/pointermove-event-not-working-with-touch-why-not
+
+      After a short period of time, the (mobile) browser will claim the pointermove event for "native" behavior like panning the page.
+
+      The designed, simple solution is to use the css property touch-action and set it to none on the container that has the event handler.
+      */}
+      <div className="bg-slate-100 touch-none">
         <SelectionTools
           isAnimated={
             canvasState.mode !== CanvasMode.Translating &&
@@ -492,7 +497,7 @@ function Canvas() {
           setLastUsedColor={setLastUsedColor}
         />
         <svg
-          className={styles.renderer_svg}
+          className="w-screen h-screen"
           onWheel={onWheel}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -525,7 +530,7 @@ function Canvas() {
             {canvasState.mode === CanvasMode.SelectionNet &&
               canvasState.current != null && (
                 <rect
-                  className={styles.selection_net}
+                  className="fill-blue-700 opacity-5"
                   x={Math.min(canvasState.origin.x, canvasState.current.x)}
                   y={Math.min(canvasState.origin.y, canvasState.current.y)}
                   width={Math.abs(canvasState.origin.x - canvasState.current.x)}
