@@ -86,7 +86,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                 <label className="text-sm font-medium">
                   Pasirinkti kambarį
                 </label>
-                <div className="bg-white mt-2 overflow-y-scroll	h-52">
+                <div className="bg-white mt-2 overflow-y-scroll	h-52 rounded-lg">
                   {rooms.map((r) => (
                     <div
                       key={r.id}
