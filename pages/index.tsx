@@ -67,11 +67,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                   className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
                   data-modal-toggle="createRoom"
                   onClick={() => {
-<<<<<<< HEAD
                     setShowRoomCreation(true);
-=======
-                    // createRoom();
->>>>>>> da0cf1bca43c52c1aa592e657ce1a1e17e925cc3
                   }}
                 >
                   SUKURTI KAMBARĮ
