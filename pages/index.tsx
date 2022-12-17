@@ -5,10 +5,11 @@ import { useState } from "react";
 import logoPic from "../public/images/logo.png";
 import { Room } from "../shared/types";
 
-import { UserInfoCookie } from "../shared/types";
 import AvatarSelection, {
   generateRandomAvatarUrl,
-} from "../src/components/AvatarSelection";
+} from "../components/AvatarSelection";
+import Modal from "../components/Modal";
+import { UserInfoCookie } from "../shared/types";
 
 const Landing = ({ rooms }: { rooms: Room[] }) => {
   const userInfoCookie = JSON.parse(
@@ -25,7 +26,6 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
   );
   const router = useRouter();
 
-  console.log(rooms);
   const play = () => {
     const userInfoCookie: UserInfoCookie = {
       avatarUrl,
@@ -118,6 +118,13 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
           </div>
         </section>
       </div>
+      <Modal
+        title="Labas"
+        active={showRoomCreation}
+        onClose={() => setShowRoomCreation(false)}
+      >
+        Labas vakaras
+      </Modal>
     </>
   );
 };
