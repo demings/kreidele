@@ -12,7 +12,6 @@ import {
 } from "../../../liveblocks.config";
 import useDeleteLayers from "../../hooks/useDeleteLayers";
 import useDisableScrollBounce from "../../hooks/useDisableScrollBounce";
-import styles from "../../index.module.css";
 import {
   Camera,
   CanvasMode,
@@ -442,7 +441,14 @@ export function Canvas() {
 
   return (
     <>
-      <div className={styles.canvas}>
+      {/**
+      https://stackoverflow.com/questions/48124372/pointermove-event-not-working-with-touch-why-not
+
+      After a short period of time, the (mobile) browser will claim the pointermove event for "native" behavior like panning the page.
+
+      The designed, simple solution is to use the css property touch-action and set it to none on the container that has the event handler.
+      */}
+      <div className="bg-slate-50 touch-none">
         <SelectionTools
           isAnimated={
             canvasState.mode !== CanvasMode.Translating &&
@@ -452,7 +458,7 @@ export function Canvas() {
           setLastUsedColor={setLastUsedColor}
         />
         <svg
-          className={styles.renderer_svg}
+          className="w-screen h-screen"
           onWheel={onWheel}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -485,7 +491,7 @@ export function Canvas() {
             {canvasState.mode === CanvasMode.SelectionNet &&
               canvasState.current != null && (
                 <rect
-                  className={styles.selection_net}
+                  className="fill-blue-700 opacity-5"
                   x={Math.min(canvasState.origin.x, canvasState.current.x)}
                   y={Math.min(canvasState.origin.y, canvasState.current.y)}
                   width={Math.abs(canvasState.origin.x - canvasState.current.x)}
