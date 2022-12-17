@@ -2,7 +2,6 @@ import { memo } from "react";
 import ColorPicker from "./ColorPicker";
 import IconButton from "./IconButton";
 import { Camera, Color } from "../types";
-import styles from "./SelectionTools.module.css";
 import useDeleteLayers from "../hooks/useDeleteLayers";
 import useSelectionBounds from "../hooks/useSelectionBounds";
 import { useSelf, useMutation } from "../../liveblocks.config";
@@ -94,7 +93,7 @@ function SelectionTools({
   const y = selectionBounds.y + camera.y;
   return (
     <div
-      className={styles.selection_inspector}
+      className="absolute p-3 rounded-xl shadow-lg flex flex-row bg-slate-50 select-none"
       style={{
         transition: isAnimated ? "transform 120ms linear" : "",
         transform: `translate(calc(${x}px - 50%), calc(${y - 16}px - 100%))`,
@@ -124,7 +123,7 @@ function SelectionTools({
           </svg>
         </IconButton>
       </div>
-      <div className={styles.selection_inspector_delete}>
+      <div className="flex items-center pl-2 ml-2 border-l-[1px]">
         <IconButton onClick={deleteLayers}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path

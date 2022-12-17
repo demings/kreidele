@@ -1,5 +1,3 @@
-import styles from "./IconButton.module.css";
-
 type Props = {
   onClick: () => void;
   children: React.ReactNode;
@@ -15,7 +13,9 @@ export default function IconButton({
 }: Props) {
   return (
     <button
-      className={`${styles.button} ${isActive ? styles.button_active : ""}`}
+      className={`rounded-md text-slate-600 flex items-center justify-center ${
+        isActive ? "text-blue-700 bg-slate-200" : ""
+      }`}
       onClick={onClick}
       disabled={disabled}
     >
