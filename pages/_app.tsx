@@ -1,6 +1,6 @@
-import React from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import React from "react";
 import "../styles/globals.css";
 
 function App({ Component, pageProps }: AppProps) {
@@ -26,6 +26,7 @@ function App({ Component, pageProps }: AppProps) {
           sizes="16x16"
           type="image/png"
         />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
       <Component {...pageProps} />
     </React.StrictMode>

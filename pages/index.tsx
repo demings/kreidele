@@ -13,6 +13,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>(generateRandomAvatarUrl());
   const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [showRoomCreation, setShowRoomCreation] = useState(false);
   const router = useRouter();
 
   console.log(rooms);
@@ -61,8 +62,9 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                 />
                 <button
                   className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
+                  data-modal-toggle="createRoom"
                   onClick={() => {
-                    createRoom();
+                    setShowRoomCreation(true);
                   }}
                 >
                   SUKURTI KAMBARĮ
