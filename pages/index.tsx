@@ -1,70 +1,106 @@
 import { setCookie } from "cookies-next";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import logoPic from "../public/images/logo.png";
+import { Room } from "../shared/types";
+
 import AvatarSelection, {
   generateRandomAvatarUrl,
 } from "../src/components/AvatarSelection";
 
-const Landing = () => {
+const Landing = ({ rooms }: { rooms: Room[] }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>(generateRandomAvatarUrl());
-  const [room, setRoom] = useState<number>(1234);
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const router = useRouter();
 
+  console.log(rooms);
   const play = () => {
     setCookie("avatar", avatarUrl);
-    setCookie("room", room);
+    setCookie("room", selectedRoom);
     setCookie("username", username);
-    router.push(`room/${room}`);
+    router.push(`room/${selectedRoom}`);
   };
 
   return (
     <>
-      <div className="bg-gradient-to-tr from-slate-800 to-sky-500">
+      <div className="bg-gradient-to-tr from-slate-600 to-sky-300">
         <section
           id="login"
-          className="p-4 flex flex-col justify-center min-h-screen max-w-md mx-auto"
+          className="p-4 pt-0 flex flex-col justify-center min-h-screen max-w-4xl mx-auto"
         >
+          <div className="flex items-center justify-center mb-8">
+            <Image
+              className="justify-center"
+              src={logoPic}
+              alt="Žaidimas KREIDELĖ - piešk ir spėliok žodžius kartu su draugų kompanija!"
+              width={484}
+              height={113}
+            />
+          </div>
           <div className="p-6 bg-slate-200 rounded">
-            <div className="flex items-center justify-center font-black m-2 mb-6">
-              <h1 className="tracking-wide text-3xl text-slate-900">
-                Kreidelė
-              </h1>
-            </div>
-            <label className="text-sm font-medium">Vartotojo vardas</label>
-            <input
-              className="mb-3 px-2 py-1.5
+            <div className="flex items-center justify-center font-black m-2 mb-2"></div>
+            <div className="grid grid-cols-2">
+              <div className="p-2">
+                <label className="text-sm font-medium">Vartotojo vardas</label>
+                <input
+                  className="mb-3 px-2 py-1.5
                   mb-3 mt-1 block w-full px-2 py-1.5 border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
-              type="text"
-              name="username"
-              placeholder="Vartotojo vardas"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <label className="text-sm font-medium">Vartotojo nuotrauka</label>
-            <AvatarSelection
-              setAvatarUrl={setAvatarUrl}
-              avatarUrl={avatarUrl}
-            />
-            <label className="text-sm font-medium">Kambarys</label>
-            <select
-              className="
-          mb-3 mt-1 block w-full px-2 py-1.5 border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
-              name="messages"
-              placeholder="Write something"
-              onChange={(e) => setRoom(parseInt(e.target.value))}
-            >
-              <option value="1234">Babaužiukai</option>
-              <option value="1235">Daiktai</option>
-            </select>
-            <button
-              className="m-auto w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-700 to-slate-900 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
-              disabled={!!!username}
-              onClick={() => {
-                play();
-              }}
-            >
-              ŽAISTI
-            </button>
+                  type="text"
+                  name="username"
+                  placeholder="Vartotojo vardas"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <label className="text-sm font-medium">
+                  Vartotojo nuotrauka
+                </label>
+                <AvatarSelection
+                  setAvatarUrl={setAvatarUrl}
+                  avatarUrl={avatarUrl}
+                />
+                <button
+                  className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
+                  onClick={() => {
+                    createRoom();
+                  }}
+                >
+                  SUKURTI KAMBARĮ
+                </button>
+              </div>
+              <div className="p-2">
+                <label className="text-sm font-medium">
+                  Pasirinkti kambarį
+                </label>
+                <div className="bg-white mt-2 overflow-y-scroll	h-52">
+                  {rooms.map((r) => (
+                    <div
+                      key={r.id}
+                      onClick={() => {
+                        setSelectedRoom(r.id);
+                      }}
+                      className={`w-full bg-slate-300 p-2 border rounded-md  ${
+                        selectedRoom === r.id
+                          ? "bg-gradient-to-r from-slate-700 to-slate-900 text-white"
+                          : ""
+                      }`}
+                      id={r.id}
+                    >
+                      {r.id}
+                    </div>
+                  ))}
+                </div>
+                <button
+                  className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-800 to-slate-900 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
+                  disabled={!!!username || !!!selectedRoom}
+                  onClick={() => {
+                    play();
+                  }}
+                >
+                  ŽAISTI
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -73,3 +109,14 @@ const Landing = () => {
 };
 
 export default Landing;
+
+export async function getServerSideProps() {
+  const res = await fetch(`https://api.liveblocks.io/v2/rooms`, {
+    headers: new Headers({
+      Authorization: `Bearer ${process.env.LIVEBLOCKS_SECRET_KEY}`,
+    }),
+  });
+  const rooms = await res.json();
+
+  return { props: { rooms: rooms.data } };
+}

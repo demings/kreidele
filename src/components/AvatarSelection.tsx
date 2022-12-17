@@ -20,11 +20,11 @@ const AvatarSelection = ({ setAvatarUrl, avatarUrl }: AvatarSelectionProps) => {
           // loader={myLoader}
           src={avatarUrl}
           alt="Jūsų avataras"
-          width={100}
-          height={100}
+          width={142}
+          height={142}
         />
         <ArrowPathIcon
-          className="w-8 fill-slate-900 hover:animate-spin cursor-pointer"
+          className="w-16 fill-slate-900 hover:animate-spin cursor-pointer"
           onClick={() => setAvatarUrl(generateRandomAvatarUrl())}
         />
       </div>

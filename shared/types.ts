@@ -126,3 +126,14 @@ export enum CanvasMode {
    */
   Pencil,
 }
+
+export interface Room {
+  type: string;
+  id: string;
+  lastConnectionAt: string;
+  createdAt: string;
+  metadata: any;
+  defaultAccesses: any[];
+  groupsAccesses: any;
+  usersAccesses: any;
+}
