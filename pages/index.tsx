@@ -1,4 +1,4 @@
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -11,10 +11,18 @@ import AvatarSelection, {
 } from "../src/components/AvatarSelection";
 
 const Landing = ({ rooms }: { rooms: Room[] }) => {
-  const [avatarUrl, setAvatarUrl] = useState<string>(generateRandomAvatarUrl());
+  const userInfoCookie = JSON.parse(
+    getCookie("user")?.toString() ?? "{}"
+  ) as UserInfoCookie;
+
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    userInfoCookie?.avatarUrl ?? generateRandomAvatarUrl()
+  );
   const [selectedRoom, setSelectedRoom] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
   const [showRoomCreation, setShowRoomCreation] = useState(false);
+  const [username, setUsername] = useState<string>(
+    userInfoCookie?.username ?? ""
+  );
   const router = useRouter();
 
   console.log(rooms);
@@ -55,6 +63,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                   name="username"
                   placeholder="Vartotojo vardas"
                   onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                 />
                 <label className="text-sm font-medium">
                   Vartotojo nuotrauka
