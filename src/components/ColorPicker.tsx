@@ -1,5 +1,6 @@
 import { Color } from "../types";
 import { colorToCss } from "../utils";
+import styles from "./ColorPicker.module.css";
 
 type Props = {
   onChange: (color: Color) => void;
@@ -7,7 +8,7 @@ type Props = {
 
 export default function ColorPicker({ onChange }: Props) {
   return (
-    <div className="flex flex-wrap items-center max-w-[121px] pr-2 mr-2 border-r-[1px]">
+    <div className={styles.container}>
       <ColorButton color={{ r: 243, g: 82, b: 35 }} onClick={onChange} />
       <ColorButton color={{ r: 255, g: 198, b: 38 }} onClick={onChange} />
       <ColorButton color={{ r: 68, g: 202, b: 99 }} onClick={onChange} />
@@ -29,11 +30,11 @@ function ColorButton({
 }) {
   return (
     <button
-      className="w-7 h-7 flex justify-center items-center"
+      className={styles.color_swatch_button}
       onClick={() => onClick(color)}
     >
       <div
-        className="w-5 h-5 rounded-full border-[1px]"
+        className={styles.color_swatch}
         style={{ background: colorToCss(color) }}
       />
     </button>

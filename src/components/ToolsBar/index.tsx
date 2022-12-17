@@ -6,6 +6,7 @@ import UndoButton from "./UndoButton";
 import RedoButton from "./RedoButton";
 import SelectionButton from "./SelectionButton";
 import { CanvasMode, LayerType, CanvasState } from "../../types";
+import styles from "./index.module.css";
 
 type Props = {
   canvasState: CanvasState;
@@ -25,9 +26,9 @@ export default function ToolsBar({
   canRedo,
 }: Props) {
   return (
-    <div className="absolute bottom-6 right-0 left-0 flex items-center justify-center">
-      <div className="shadow-md rounded-xl bg-slate-100 flex items-center content-center">
-        <div className="flex items-center justify-center p-3">
+    <div className={styles.tools_panel_container}>
+      <div className={styles.tools_panel}>
+        <div className={styles.tools_panel_section}>
           <SelectionButton
             isActive={
               canvasState.mode === CanvasMode.None ||
@@ -67,8 +68,8 @@ export default function ToolsBar({
             }
           />
         </div>
-        <div className="w-px bg-slate-300 self-stretch"></div>
-        <div className="flex items-center justify-center p-3">
+        <div className={styles.seperator}></div>
+        <div className={styles.tools_panel_section}>
           <UndoButton onClick={undo} disabled={!canUndo} />
           <RedoButton onClick={redo} disabled={!canRedo} />
         </div>
