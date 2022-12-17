@@ -1,4 +1,3 @@
-// import classNames from "classnames";
 import Image from "next/image";
 import { useMemo } from "react";
 import { getContrastingColor } from "../../shared/utils";
@@ -12,6 +11,7 @@ type BothProps = {
   borderRadius?: number;
   className?: string;
   style?: Record<string, string>;
+  avatarUrl?: string;
 };
 
 type PictureProps = BothProps & {
@@ -48,12 +48,14 @@ export function Avatar({
   outlineColor = "",
   outlineWidth = 3,
   borderRadius = 9999,
-  className = "",
   style = {},
   count = 0,
+  avatarUrl,
 }: AvatarProps) {
-  const innerVariant = variant === "avatar" && !picture ? "letter" : variant;
+  const innerVariant = !picture && !avatarUrl ? "letter" : variant;
   const realSize = size - outlineWidth * 2;
+
+  // console.log({ innerVariant, picture, avatarUrl });
 
   return (
     <div
@@ -65,7 +67,6 @@ export function Avatar({
         borderRadius,
         ...style,
       }}
-      // className={classNames(styles.avatar, className)}
       className={styles.avatar}
       data-tooltip={name}
     >
@@ -76,7 +77,7 @@ export function Avatar({
       {innerVariant === "avatar" ? (
         <PictureCircle
           name={name}
-          picture={picture}
+          picture={avatarUrl ?? picture}
           size={realSize}
           borderRadius={borderRadius}
         />

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useOthersMapped, useSelf } from "../../liveblocks.config";
+import { UserInfoCookie } from "../../shared/types";
 import { Avatar } from "./Avatar";
 
 /**
@@ -33,7 +34,7 @@ const avatarProps = {
   outlineColor: "white",
 };
 
-interface AvatarInfo {
+interface AvatarInfo extends UserInfoCookie {
   picture: string;
   name: string;
   color: [string, string];
@@ -91,9 +92,18 @@ export function LiveAvatars() {
 }
 
 const AvatarFromInfo = ({ info }: { info: AvatarInfo }) => {
-  console.log({ info });
-  const { color, name, picture } = info as any as AvatarInfo;
+  const { color, name, picture, username, avatarUrl } =
+    info as any as AvatarInfo;
   return (
-    <Avatar {...avatarProps} picture={picture} name={name} color={color} />
+    <>
+      <Avatar
+        {...avatarProps}
+        variant="avatar"
+        picture={picture}
+        name={username}
+        color={color}
+        avatarUrl={avatarUrl}
+      />
+    </>
   );
 };

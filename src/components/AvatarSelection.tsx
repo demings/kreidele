@@ -4,7 +4,7 @@ import Image from "next/image";
 export const generateRandomAvatarUrl = () => {
   return `https://avatars.dicebear.com/api/personas/${(Math.random() + 1)
     .toString(36)
-    .substring(7)}.svg?background=%23e2e8f0`;
+    .substring(7)}.svg`;
 };
 
 interface AvatarSelectionProps {

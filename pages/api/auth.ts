@@ -1,5 +1,7 @@
 import { authorize } from "@liveblocks/node";
+import { getCookie } from "cookies-next";
 import { NextApiRequest, NextApiResponse } from "next";
+import { UserInfoCookie } from "../../shared/types";
 
 const API_KEY = process.env.LIVEBLOCKS_SECRET_KEY;
 
@@ -10,13 +12,21 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
   const room = req.body.room;
 
+  const userInfoCookie = JSON.parse(
+    getCookie("user", { req, res })?.toString() ?? ""
+  ) as UserInfoCookie;
+
+  console.log({ userInfoCookie });
+
   const response = await authorize({
     room,
     secret: API_KEY,
     // TODO: get info from cookies
     userInfo: {
       name: NAMES[Math.floor(Math.random() * NAMES.length)],
+      username: userInfoCookie.username,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      avatarUrl: userInfoCookie.avatarUrl,
 
       // Uncomment below and refresh to see with avatar graphics
       // picture: `https://liveblocks.io/avatars/avatar-${Math.floor(
