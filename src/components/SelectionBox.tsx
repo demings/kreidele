@@ -1,5 +1,4 @@
 import { memo } from "react";
-import styles from "./SelectionBox.module.css";
 import useSelectionBounds from "../hooks/useSelectionBounds";
 import { useSelf, useStorage } from "../../liveblocks.config";
 import { LayerType, Side, XYWH } from "../types";
@@ -29,10 +28,12 @@ const SelectionBox = memo(
       return null;
     }
 
+    const selectionHandle = "fill-white stroke-blue-700 stroke-1";
+
     return (
       <>
         <rect
-          className={styles.selection}
+          className="fill-transparent stroke-blue-700 stroke-1 pointer-events-none"
           style={{
             transition: isAnimated ? "all 120ms linear" : "",
             transform: `translate(${bounds.x}px, ${bounds.y}px)`,
@@ -45,7 +46,7 @@ const SelectionBox = memo(
         {isShowingHandles && (
           <>
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -63,7 +64,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -81,7 +82,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -99,7 +100,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -117,7 +118,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -135,7 +136,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -153,7 +154,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
@@ -171,7 +172,7 @@ const SelectionBox = memo(
               }}
             />
             <rect
-              className={styles.selection_handle}
+              className={selectionHandle}
               x={0}
               y={0}
               style={{
