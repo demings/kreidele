@@ -1,13 +1,13 @@
 import {
+  Camera,
   Color,
-  Side,
   EllipseLayer,
   Layer,
   LayerType,
-  Point,
-  XYWH,
   PathLayer,
-  Camera,
+  Point,
+  Side,
+  XYWH,
 } from "./types";
 
 export function colorToCss(color: Color) {
