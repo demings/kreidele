@@ -20,7 +20,7 @@ import {
   Point,
   Side,
   XYWH,
-} from "../../types";
+} from "../../../shared/types";
 import {
   colorToCss,
   connectionIdToColor,
@@ -28,7 +28,7 @@ import {
   penPointsToPathLayer,
   pointerEventToCanvasPoint,
   resizeBounds,
-} from "../../utils";
+} from "../../../shared/utils";
 import LayerComponent from "../LayerComponent";
 import MultiplayerGuides from "../MultiplayerGuides";
 import Path from "../Path";
