@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.13",
     "@liveblocks/client": "^0.19.1",
     "@liveblocks/node": "^0.19.1",
     "@liveblocks/react": "^0.19.1",

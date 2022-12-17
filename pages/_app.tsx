@@ -11,7 +11,7 @@ function App({ Component, pageProps }: AppProps) {
      **/
     <React.StrictMode>
       <Head>
-        <title>Liveblocks</title>
+        <title>Kreidelė</title>
         <meta name="robots" content="noindex" />
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link
