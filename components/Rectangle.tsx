@@ -1,35 +1,37 @@
-import { EllipseLayer } from "../types";
-import { colorToCss } from "../utils";
+import { RectangleLayer } from "../shared/types";
+import { colorToCss } from "../shared/utils";
 
 type Props = {
   id: string;
-  layer: EllipseLayer;
+  layer: RectangleLayer;
   isAnimated: boolean;
   onPointerDown: (e: React.PointerEvent, id: string) => void;
   selectionColor?: string;
 };
 
-export default function Ellipse({
+export default function Rectangle({
   layer,
   isAnimated,
   onPointerDown,
   id,
   selectionColor,
 }: Props) {
+  const { x, y, width, height, fill } = layer;
+
   return (
-    <ellipse
+    <rect
       onPointerDown={(e) => onPointerDown(e, id)}
       style={{
         transition: isAnimated ? "all 120ms linear" : "",
-        transform: `translate(${layer.x}px, ${layer.y}px)`,
+        transform: `translate(${x}px, ${y}px)`,
       }}
-      cx={layer.width / 2}
-      cy={layer.height / 2}
-      rx={layer.width / 2}
-      ry={layer.height / 2}
-      fill={layer.fill ? colorToCss(layer.fill) : "#CCC"}
+      x={0}
+      y={0}
+      width={width}
+      height={height}
+      fill={fill ? colorToCss(fill) : "#CCC"}
+      strokeWidth={1}
       stroke={selectionColor || "transparent"}
-      strokeWidth="1"
     />
   );
 }

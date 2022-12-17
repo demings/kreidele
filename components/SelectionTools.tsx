@@ -1,10 +1,10 @@
 import { memo } from "react";
-import ColorPicker from "./ColorPicker";
-import IconButton from "./IconButton";
-import { Camera, Color } from "../types";
 import useDeleteLayers from "../hooks/useDeleteLayers";
 import useSelectionBounds from "../hooks/useSelectionBounds";
-import { useSelf, useMutation } from "../../liveblocks.config";
+import { useMutation, useSelf } from "../liveblocks.config";
+import { Camera, Color } from "../shared/types";
+import ColorPicker from "./ColorPicker";
+import IconButton from "./IconButton";
 
 type SelectionToolsProps = {
   isAnimated: boolean;
