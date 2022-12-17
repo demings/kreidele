@@ -28,10 +28,10 @@ export default function RoomPage({ id }: { id: string }) {
       >
         <ClientSideSuspense fallback={<Loading />}>
           {() => (
-            <>
+            <div className="grid grid-cols-2 gap-2 flex justify-center items-center max-w-md">
               <LiveAvatars />
               <Canvas />
-            </>
+            </div>
           )}
         </ClientSideSuspense>
       </RoomProvider>

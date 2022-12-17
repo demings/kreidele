@@ -13,7 +13,7 @@ import { UserInfoCookie } from "../shared/types";
 
 const Landing = ({ rooms }: { rooms: Room[] }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>(generateRandomAvatarUrl());
-  const [selectedRoom, setSelectedRoom] = useState<string>("");
+  const [selectedRoom, setSelectedRoom] = useState<string>();
   const [showRoomCreation, setShowRoomCreation] = useState(false);
   const [username, setUsername] = useState<string>("");
 
@@ -38,6 +38,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
     };
     setCookie("user", userInfoCookie);
   };
+
   const play = () => {
     setUserCookies();
     router.push(`room/${selectedRoom}`);
@@ -120,7 +121,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                 </div>
                 <button
                   className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-800 to-slate-900 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
-                  disabled={!username && !selectedRoom}
+                  disabled={!username || !selectedRoom}
                   onClick={() => {
                     play();
                   }}

@@ -1,6 +1,12 @@
 import { LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import useDeleteLayers from "../../hooks/useDeleteLayers";
 import {
   useCanRedo,
@@ -47,9 +53,9 @@ export function Canvas() {
   });
   const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
   const [lastUsedColor, setLastUsedColor] = useState<Color>({
-    r: 252,
-    g: 142,
-    b: 42,
+    r: 0,
+    g: 0,
+    b: 0,
   });
   const history = useHistory();
   const canUndo = useCanUndo();
@@ -436,6 +442,23 @@ export function Canvas() {
     ]
   );
 
+  const canvasDivRef = useRef();
+  const [canvasX, setCanvasX] = useState<number>();
+  const [canvasY, setCanvasY] = useState<number>();
+
+  const getPosition = () => {
+    setCanvasX((canvasDivRef.current as any).offsetLeft);
+    setCanvasY((canvasDivRef.current as any).offsetTop);
+  };
+
+  useEffect(() => {
+    // Get the position of canvas in the beginning
+    getPosition();
+
+    // Re-calculate X and Y of the red box when the window is resized by the user
+    window.addEventListener("resize", getPosition);
+  }, []);
+
   return (
     <>
       {/**
@@ -454,62 +477,73 @@ export function Canvas() {
           camera={camera}
           setLastUsedColor={setLastUsedColor}
         />
-        <svg
-          className="w-screen h-screen"
-          onWheel={onWheel}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerLeave={onPointerLeave}
-          onPointerUp={onPointerUp}
+
+        <div
+          className="rounded-md justify-center items-center"
+          ref={canvasDivRef as any}
         >
-          <g
-            style={{
-              transform: `translate(${camera.x}px, ${camera.y}px)`,
-            }}
+          <svg
+            className="w-96 h-96 bg-blue-300"
+            onWheel={onWheel}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerLeave={onPointerLeave}
+            onPointerUp={onPointerUp}
           >
-            {layerIds.map((layerId) => (
-              <LayerComponent
-                key={layerId}
-                id={layerId}
-                mode={canvasState.mode}
-                onLayerPointerDown={onLayerPointerDown}
-                selectionColor={layerIdsToColorSelection[layerId]}
+            <g
+              style={{
+                transform: `translate(${camera.x - canvasX!}px, ${
+                  camera.y - canvasY!
+                }px)`,
+              }}
+            >
+              {layerIds.map((layerId) => (
+                <LayerComponent
+                  key={layerId}
+                  id={layerId}
+                  mode={canvasState.mode}
+                  onLayerPointerDown={onLayerPointerDown}
+                  selectionColor={layerIdsToColorSelection[layerId]}
+                />
+              ))}
+              {/* Blue square that show the selection of the current users. Also contains the resize handles. */}
+              <SelectionBox
+                onResizeHandlePointerDown={onResizeHandlePointerDown}
+                isAnimated={
+                  canvasState.mode !== CanvasMode.Translating &&
+                  canvasState.mode !== CanvasMode.Resizing
+                }
               />
-            ))}
-            {/* Blue square that show the selection of the current users. Also contains the resize handles. */}
-            <SelectionBox
-              onResizeHandlePointerDown={onResizeHandlePointerDown}
-              isAnimated={
-                canvasState.mode !== CanvasMode.Translating &&
-                canvasState.mode !== CanvasMode.Resizing
-              }
-            />
-            {/* Selection net that appears when the user is selecting multiple layers at once */}
-            {canvasState.mode === CanvasMode.SelectionNet &&
-              canvasState.current != null && (
-                <rect
-                  className="fill-blue-700 opacity-5"
-                  x={Math.min(canvasState.origin.x, canvasState.current.x)}
-                  y={Math.min(canvasState.origin.y, canvasState.current.y)}
-                  width={Math.abs(canvasState.origin.x - canvasState.current.x)}
-                  height={Math.abs(
-                    canvasState.origin.y - canvasState.current.y
-                  )}
+              {/* Selection net that appears when the user is selecting multiple layers at once */}
+              {canvasState.mode === CanvasMode.SelectionNet &&
+                canvasState.current != null && (
+                  <rect
+                    className="fill-blue-700 opacity-5"
+                    x={Math.min(canvasState.origin.x, canvasState.current.x)}
+                    y={Math.min(canvasState.origin.y, canvasState.current.y)}
+                    width={Math.abs(
+                      canvasState.origin.x - canvasState.current.x
+                    )}
+                    height={Math.abs(
+                      canvasState.origin.y - canvasState.current.y
+                    )}
+                  />
+                )}
+              <MultiplayerGuides />
+              {/* Drawing in progress. Still not commited to the storage. */}
+              {pencilDraft != null && pencilDraft.length > 0 && (
+                <Path
+                  points={pencilDraft}
+                  fill={colorToCss(lastUsedColor)}
+                  x={0}
+                  y={0}
                 />
               )}
-            <MultiplayerGuides />
-            {/* Drawing in progress. Still not commited to the storage. */}
-            {pencilDraft != null && pencilDraft.length > 0 && (
-              <Path
-                points={pencilDraft}
-                fill={colorToCss(lastUsedColor)}
-                x={0}
-                y={0}
-              />
-            )}
-          </g>
-        </svg>
+            </g>
+          </svg>
+        </div>
       </div>
+
       <ToolsBar
         canvasState={canvasState}
         setCanvasState={setState}
