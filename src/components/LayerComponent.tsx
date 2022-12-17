@@ -1,10 +1,10 @@
+import { useStorage } from "../../liveblocks.config";
 import React, { memo } from "react";
-import { useStorage } from "../liveblocks.config";
-import { CanvasMode, LayerType } from "../shared/types";
-import { colorToCss } from "../shared/utils";
 import Ellipse from "./Ellipse";
 import Path from "./Path";
 import Rectangle from "./Rectangle";
+import { CanvasMode, LayerType } from "../types";
+import { colorToCss } from "../utils";
 
 type Props = {
   id: string;

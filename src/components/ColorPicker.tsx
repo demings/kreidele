@@ -1,5 +1,5 @@
-import { Color } from "../shared/types";
-import { colorToCss } from "../shared/utils";
+import { Color } from "../types";
+import { colorToCss } from "../utils";
 
 type Props = {
   onChange: (color: Color) => void;

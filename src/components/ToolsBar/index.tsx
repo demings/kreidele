@@ -1,10 +1,11 @@
-import { CanvasMode, CanvasState, LayerType } from "../../shared/types";
-import EllipseButton from "./EllipseButton";
+import React from "react";
 import PencilButton from "./PencilButton";
 import RectangleButton from "./RectangleButton";
+import EllipseButton from "./EllipseButton";
+import UndoButton from "./UndoButton";
 import RedoButton from "./RedoButton";
 import SelectionButton from "./SelectionButton";
-import UndoButton from "./UndoButton";
+import { CanvasMode, LayerType, CanvasState } from "../../types";
 
 type Props = {
   canvasState: CanvasState;
