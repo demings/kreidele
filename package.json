@@ -14,6 +14,7 @@
     "@liveblocks/node": "^0.19.1",
     "@liveblocks/react": "^0.19.1",
     "cookies-next": "^2.1.1",
+    "framer-motion": "^7.10.2",
     "nanoid": "^3.1.25",
     "next": "^12.1.6",
     "perfect-freehand": "^0.5.3",

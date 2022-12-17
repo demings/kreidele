@@ -1,6 +1,7 @@
 import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
+import { LiveAvatars } from "../../components/Room/LiveAvatars";
 import { RoomProvider } from "../../liveblocks.config";
 import { Layer } from "../../shared/types";
 import { Canvas } from "../../src/components/Room/Canvas";
@@ -26,7 +27,12 @@ export default function RoomPage({ id }: { id: string }) {
         }}
       >
         <ClientSideSuspense fallback={<Loading />}>
-          {() => <Canvas />}
+          {() => (
+            <>
+              <LiveAvatars />
+              <Canvas />
+            </>
+          )}
         </ClientSideSuspense>
       </RoomProvider>
     </>
