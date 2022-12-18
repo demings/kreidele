@@ -43,7 +43,7 @@ export function ChatHistory({ messages, setMessages }: ChatHistoryProps) {
     <div className="flex-1 px-4 pt-2 justify-between flex flex-col">
       <div
         id="messages"
-        className="flex flex-col space-y-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+        className="flex flex-col space-y-1 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
       >
         {groupedMessages.map((group) => (
           <ChatMessages
