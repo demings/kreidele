@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState } from "react";
 
 type AvatarProps = {
   username: string;
@@ -25,6 +26,8 @@ export function Avatar({
   borderRadius = 9999,
   style = {},
 }: AvatarProps) {
+  const [pulse, setPulse] = useState(false);
+
   const realSize = size - outlineWidth * 2;
 
   return (
@@ -40,14 +43,25 @@ export function Avatar({
       className="flex relative place-content-center"
       data-tooltip={username}
     >
-      <PictureCircle
-        username={username}
-        avatarUrl={avatarUrl}
-        size={realSize}
-        borderRadius={borderRadius}
-      />
+      <div
+        onClick={() => {
+          if (!pulse) {
+            setPulse(true);
+            setTimeout(() => setPulse(false), 2000);
+          }
+        }}
+      >
+        <PictureCircle
+          username={username}
+          avatarUrl={avatarUrl}
+          size={realSize}
+          borderRadius={borderRadius}
+        />
+      </div>
 
-      <span className="bg-green-600 block absolute right-2 bottom-0 w-2 h-2 rounded-full animate-pulse-bg-once" />
+      {pulse && (
+        <span className="bg-green-600 block absolute right-2 bottom-0 w-2 h-2 rounded-full animate-pulse-bg-once" />
+      )}
     </div>
   );
 }

@@ -13,7 +13,7 @@ module.exports = {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
       animation: {
-        "pulse-bg-once": "pulse-bg-once 2s ease-in forwards",
+        "pulse-bg-once": "pulse-bg-once 2s forwards",
       },
       keyframes: {
         "pulse-bg-once": {
