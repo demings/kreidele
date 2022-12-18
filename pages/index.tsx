@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import logoPic from "../public/images/logo.png";
 import { Room } from "../shared/types";
 
+import { GetServerSideProps } from "next";
 import AvatarSelection, {
   generateRandomAvatarUrl,
 } from "../components/AvatarSelection";
@@ -225,9 +226,9 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
 
 export default Landing;
 
-export async function getServerSideProps({ req }) {
-  const { origin } = absoluteUrl(req);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { origin } = absoluteUrl(context.req);
   const res = await fetch(`${origin}/api/room`);
   const rooms = await res.json();
   return { props: { rooms: rooms.success } };
-}
+};
