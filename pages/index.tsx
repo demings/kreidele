@@ -223,8 +223,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   return {
     props: {
       rooms: rooms.success,
-      avatarUrlFromCookie: userInfoCookie?.avatarUrl,
-      usernameFromCookie: userInfoCookie?.username,
+      avatarUrlFromCookie: userInfoCookie?.avatarUrl ?? null,
+      usernameFromCookie: userInfoCookie?.username ?? null,
     },
   };
 };
