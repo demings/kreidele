@@ -27,8 +27,6 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
     setUsername(userInfoCookie.username);
   }, []);
 
-  console.log(rooms);
-
   const [roomCreationConfiguration, setRoomCreationConfiguration] = useState({
     name: "",
     private: false,
