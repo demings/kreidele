@@ -27,6 +27,8 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
     setUsername(userInfoCookie.username);
   }, []);
 
+  console.log(rooms);
+
   const [roomCreationConfiguration, setRoomCreationConfiguration] = useState({
     name: "",
     private: false,
@@ -229,5 +231,5 @@ export async function getServerSideProps({ req }) {
   const { origin } = absoluteUrl(req);
   const res = await fetch(`${origin}/api/room`);
   const rooms = await res.json();
-  return { props: { rooms: rooms.success.data } };
+  return { props: { rooms: rooms.success } };
 }

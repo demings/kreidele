@@ -70,7 +70,11 @@ export default async function handler(
     return res.status(200).json({ success: answer });
   } else if (req.method === "GET") {
     const answer = await getRooms();
-    res.status(200).json({ success: answer });
+    let publicRooms = answer.data.filter((el: Room) => {
+      return el.metadata.private === "false";
+    });
+    console.log(publicRooms);
+    res.status(200).json({ success: publicRooms });
   } else {
     res.status(200).json({ message: "This method is not implemented" });
   }
