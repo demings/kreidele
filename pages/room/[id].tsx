@@ -2,6 +2,7 @@ import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
 import { Canvas } from "../../components/Room/Canvas/Canvas";
+import { ChatHistory } from "../../components/Room/ChatHistory";
 import { GuessInput } from "../../components/Room/GuessInput";
 import { LiveAvatars } from "../../components/Room/LiveAvatars";
 import { RoomProvider } from "../../liveblocks.config";
@@ -31,7 +32,10 @@ export default function RoomPage({ id }: { id: string }) {
           <div className="flex justify-center">
             <div className="grid h-screen place-items-center">
               <div className="w-96 shadow-md grid grid-rows-flow grid-cols-1">
-                <div className="bg-white rounded-t-md border-b">
+                <div className="col-span-2 rounded-t-md bg-slate-50">
+                  <ChatHistory />
+                </div>
+                <div className="bg-white  border-b">
                   <LiveAvatars />
                 </div>
                 <Canvas />

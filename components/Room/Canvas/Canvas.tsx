@@ -481,7 +481,6 @@ export function Canvas() {
         />
         <svg
           className=" bg-slate-50 flex w-full h-full"
-          // onWheel={onWheel}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}
@@ -516,7 +515,7 @@ export function Canvas() {
               />
             )}
           <Drafts />
-          {/* Drawing in progress. Still not commited to the storage. */}
+          {/* Drawing in progress. Still not committed to the storage. */}
           {pencilDraft != null && pencilDraft.length > 0 && (
             <Path
               points={pencilDraft}
