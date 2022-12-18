@@ -218,8 +218,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     getCookie("user", { req, res })?.toString() ?? "{}"
   ) as UserInfoCookie;
 
-  console.log({ userInfoCookie });
-
   return {
     props: {
       rooms: rooms.success,
