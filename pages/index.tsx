@@ -73,71 +73,69 @@ const Landing = ({
 
   return (
     <>
-      <div className="bg-gradient-to-tr from-slate-600 to-sky-300">
-        <div
-          id="login"
-          className="p-4 pt-0 flex flex-col justify-center min-h-screen max-w-4xl mx-auto"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <Image
-              className="justify-center"
-              src={logoPic}
-              alt="Žaidimas KREIDELĖ - piešk ir spėliok žodžius kartu su draugų kompanija!"
-              width={484}
-              height={113}
+      <div
+        id="login"
+        className="p-4 pt-0 flex flex-col justify-center min-h-screen max-w-4xl mx-auto"
+      >
+        <div className="flex items-center justify-center mb-8">
+          <Image
+            className="justify-center"
+            src={logoPic}
+            alt="Žaidimas KREIDELĖ - piešk ir spėliok žodžius kartu su draugų kompanija!"
+            width={484}
+            height={113}
+          />
+        </div>
+        <div className="max-h-96 grid grid-cols-2 grid-rows-5 gap-4 p-6 bg-slate-200 rounded">
+          <input
+            className=" block h-11 p-2 w-full border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
+            type="text"
+            name="username"
+            placeholder="Vardas"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+          <div className="row-span-4 overflow-y-scroll rounded-lg">
+            {rooms.map((r) => (
+              <div
+                key={r.id}
+                onClick={() => {
+                  setSelectedRoom(r.id);
+                }}
+                className={`w-full bg-slate-50 p-2 border rounded-md  ${
+                  selectedRoom === r.id ? "bg-slate-500 text-white" : ""
+                }`}
+                id={r.id}
+              >
+                {r.metadata.name || r.id}
+              </div>
+            ))}
+          </div>
+          <div className="row-span-3">
+            <AvatarSelection
+              setAvatarUrl={setAvatarUrl}
+              avatarUrl={avatarUrl}
             />
           </div>
-          <div className="max-h-96 grid grid-cols-2 grid-rows-5 gap-4 p-6 bg-slate-200 rounded">
-            <input
-              className=" block h-11 p-2 w-full border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
-              type="text"
-              name="username"
-              placeholder="Vardas"
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-            />
-            <div className="row-span-4 overflow-y-scroll rounded-lg">
-              {rooms.map((r) => (
-                <div
-                  key={r.id}
-                  onClick={() => {
-                    setSelectedRoom(r.id);
-                  }}
-                  className={`w-full bg-slate-50 p-2 border rounded-md  ${
-                    selectedRoom === r.id ? "bg-slate-500 text-white" : ""
-                  }`}
-                  id={r.id}
-                >
-                  {r.metadata.name || r.id}
-                </div>
-              ))}
-            </div>
-            <div className="row-span-3">
-              <AvatarSelection
-                setAvatarUrl={setAvatarUrl}
-                avatarUrl={avatarUrl}
-              />
-            </div>
-            <button
-              className="w-full rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25"
-              data-modal-toggle="createRoom"
-              disabled={!username}
-              onClick={() => {
-                setShowRoomCreation(true);
-              }}
-            >
-              SUKURTI KAMBARĮ
-            </button>
-            <button
-              className="w-full rounded-md shadow-lg bg-gradient-to-r from-slate-800 to-slate-900 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25"
-              disabled={!username || !selectedRoom}
-              onClick={() => {
-                play();
-              }}
-            >
-              ŽAISTI
-            </button>
-          </div>
+          <button
+            className="w-full rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25"
+            data-modal-toggle="createRoom"
+            disabled={!username}
+            onClick={() => {
+              setShowRoomCreation(true);
+            }}
+          >
+            SUKURTI KAMBARĮ
+          </button>
+          <button
+            className="w-full rounded-md shadow-lg bg-gradient-to-r from-slate-800 to-slate-900 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25"
+            disabled={!username || !selectedRoom}
+            onClick={() => {
+              play();
+            }}
+          >
+            ŽAISTI
+          </button>
         </div>
       </div>
       <Modal

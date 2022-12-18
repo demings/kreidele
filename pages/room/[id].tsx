@@ -27,7 +27,7 @@ export default function RoomPage({ id }: { id: string }) {
     >
       <ClientSideSuspense fallback={<Loading />}>
         {() => (
-          <div className="bg-gradient-to-tr from-slate-600 to-sky-300 grid h-screen place-items-center">
+          <div className="grid h-screen place-items-center">
             <div className="shadow-md grid grid-rows-flow">
               <div className="bg-white rounded-t-md border-b-[1px]">
                 <LiveAvatars />

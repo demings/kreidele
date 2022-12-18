@@ -1,11 +1,9 @@
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
-
 @import "tailwindcss/utilities";
 
 @layer base {
   body {
-    @apply bg-white overflow-hidden;
+    @apply bg-gradient-to-tr from-slate-600 to-sky-300 overflow-hidden;
   }
 }
