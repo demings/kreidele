@@ -1,4 +1,5 @@
 import { getCookie, setCookie } from "cookies-next";
+import absoluteUrl from "next-absolute-url";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
   const [selectedRoom, setSelectedRoom] = useState<string>();
   const [showRoomCreation, setShowRoomCreation] = useState(false);
   const [username, setUsername] = useState<string>("");
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     const userInfoCookie = JSON.parse(
@@ -44,9 +46,26 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
     router.push(`room/${selectedRoom}`);
   };
 
-  const createRoom = () => {
+  const createRoom = async () => {
     setUserCookies();
-    router.push(`room/${roomCreationConfiguration.name}`);
+    const data = {
+      name: roomCreationConfiguration.name,
+      private: roomCreationConfiguration.private,
+    };
+    const response = await fetch("/api/room/", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    const responseAnswer = await response.json();
+    if (!responseAnswer.success) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+      router.push(`room/${responseAnswer.success.id}`);
+    }
+
+    // return response.json();
+    // router.push(`room/${removeAccents(roomCreationConfiguration.name)}`);
   };
 
   return (
@@ -115,7 +134,7 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
                       }`}
                       id={r.id}
                     >
-                      {r.id}
+                      {r.metadata.name || r.id}
                     </div>
                   ))}
                 </div>
@@ -155,18 +174,41 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
             value={roomCreationConfiguration.name}
           />
         </div>
-        <div className="w-full">
+        <div className="w-full mb-2">
           <label className="inline-flex relative items-center cursor-pointer">
             <span className="mr-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               Privatus
             </span>
-            <input type="checkbox" value="" className="sr-only peer" disabled />
+            <input
+              type="checkbox"
+              value=""
+              className="sr-only peer"
+              onChange={(e) => {
+                setRoomCreationConfiguration({
+                  ...roomCreationConfiguration,
+                  private: !!e.target.checked,
+                });
+              }}
+            />
             <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[68px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
           </label>
         </div>
         <div className="w-full">
+          <div
+            className={`bg-red-100 border border-red-400 text-red-700 px-4 rounded relative mb-2 ${
+              showError ? "" : "hidden"
+            }`}
+            role="alert"
+          >
+            <span className="block text-md">
+              Toks kambario vardas jau užimtas
+            </span>
+            <span className="absolute top-0 bottom-0 right-0 px-4"></span>
+          </div>
           <button
-            className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
+            className={`w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25 ${
+              showError ? " from-red-600 to-red-800" : ""
+            }`}
             data-modal-toggle="createRoom"
             disabled={!username}
             onClick={() => {
@@ -183,13 +225,9 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
 
 export default Landing;
 
-export async function getServerSideProps() {
-  const res = await fetch(`https://api.liveblocks.io/v2/rooms`, {
-    headers: new Headers({
-      Authorization: `Bearer ${process.env.LIVEBLOCKS_SECRET_KEY}`,
-    }),
-  });
+export async function getServerSideProps({ req }) {
+  const { origin } = absoluteUrl(req);
+  const res = await fetch(`${origin}/api/room`);
   const rooms = await res.json();
-
-  return { props: { rooms: rooms.data } };
+  return { props: { rooms: rooms.success.data } };
 }
