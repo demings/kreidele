@@ -35,8 +35,8 @@ import {
   pointerEventToCanvasPoint,
   resizeBounds,
 } from "../../../shared/utils";
+import Drafts from "./Drafts";
 import LayerComponent from "./LayerComponent";
-import MultiplayerGuides from "./MultiplayerGuides";
 import Path from "./Path";
 import SelectionBox from "./SelectionBox";
 import SelectionTools from "./SelectionTools";
@@ -529,7 +529,7 @@ export function Canvas() {
                   )}
                 />
               )}
-            <MultiplayerGuides />
+            <Drafts />
             {/* Drawing in progress. Still not commited to the storage. */}
             {pencilDraft != null && pencilDraft.length > 0 && (
               <Path
