@@ -13,7 +13,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const room = req.body.room;
 
   const userInfoCookie = JSON.parse(
-    getCookie("user", { req, res })?.toString() ?? ""
+    getCookie("user", { req, res })?.toString() ?? "{}"
   ) as UserInfoCookie;
 
   console.log({ userInfoCookie });

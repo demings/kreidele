@@ -2,7 +2,7 @@ import { getCookie, setCookie } from "cookies-next";
 import absoluteUrl from "next-absolute-url";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import logoPic from "../public/images/logo.png";
 import { Room } from "../shared/types";
 
@@ -13,20 +13,22 @@ import AvatarSelection, {
 import Modal from "../components/Modal";
 import { UserInfoCookie } from "../shared/types";
 
-const Landing = ({ rooms }: { rooms: Room[] }) => {
-  const [avatarUrl, setAvatarUrl] = useState<string>(generateRandomAvatarUrl());
+const Landing = ({
+  rooms,
+  avatarUrlFromCookie,
+  usernameFromCookie,
+}: {
+  rooms: Room[];
+  usernameFromCookie?: string;
+  avatarUrlFromCookie?: string;
+}) => {
+  const [avatarUrl, setAvatarUrl] = useState<string>(
+    avatarUrlFromCookie ?? generateRandomAvatarUrl()
+  );
   const [selectedRoom, setSelectedRoom] = useState<string>();
   const [showRoomCreation, setShowRoomCreation] = useState(false);
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string>(usernameFromCookie ?? "");
   const [showError, setShowError] = useState(false);
-
-  useEffect(() => {
-    const userInfoCookie = JSON.parse(
-      getCookie("user")?.toString() ?? "{}"
-    ) as UserInfoCookie;
-    setAvatarUrl(userInfoCookie.avatarUrl);
-    setUsername(userInfoCookie.username);
-  }, []);
 
   const [roomCreationConfiguration, setRoomCreationConfiguration] = useState({
     name: "",
@@ -226,9 +228,22 @@ const Landing = ({ rooms }: { rooms: Room[] }) => {
 
 export default Landing;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { origin } = absoluteUrl(context.req);
-  const res = await fetch(`${origin}/api/room`);
-  const rooms = await res.json();
-  return { props: { rooms: rooms.success } };
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const { origin } = absoluteUrl(req);
+  const result = await fetch(`${origin}/api/room`);
+  const rooms = await result.json();
+
+  const userInfoCookie = JSON.parse(
+    getCookie("user", { req, res })?.toString() ?? "{}"
+  ) as UserInfoCookie;
+
+  console.log({ userInfoCookie });
+
+  return {
+    props: {
+      rooms: rooms.success,
+      avatarUrlFromCookie: userInfoCookie?.avatarUrl,
+      usernameFromCookie: userInfoCookie?.username,
+    },
+  };
 };
