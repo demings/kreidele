@@ -38,8 +38,8 @@ import {
 import Drafts from "./Drafts";
 import LayerComponent from "./LayerComponent";
 import Path from "./Path";
-import SelectionBox from "./SelectionBox";
-import SelectionTools from "./SelectionTools";
+import SelectionBox from "./Selection/SelectionBox";
+import SelectionTools from "./Selection/SelectionTools";
 import { ToolsBar } from "./ToolsBar/ToolsBar";
 
 const MAX_LAYERS = 100;
