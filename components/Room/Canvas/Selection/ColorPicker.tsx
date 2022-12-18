@@ -7,7 +7,7 @@ type Props = {
 
 export default function ColorPicker({ onChange }: Props) {
   return (
-    <div className="flex flex-wrap items-center max-w-[121px] pr-2 mr-2 border-r-[1px]">
+    <div className="flex flex-wrap items-center max-w-[121px] pr-2 mr-2 border-r">
       <ColorButton color={{ r: 243, g: 82, b: 35 }} onClick={onChange} />
       <ColorButton color={{ r: 255, g: 198, b: 38 }} onClick={onChange} />
       <ColorButton color={{ r: 68, g: 202, b: 99 }} onClick={onChange} />
@@ -33,7 +33,7 @@ function ColorButton({
       onClick={() => onClick(color)}
     >
       <div
-        className="w-5 h-5 rounded-full border-[1px]"
+        className="w-5 h-5 rounded-full border"
         style={{ background: colorToCss(color) }}
       />
     </button>

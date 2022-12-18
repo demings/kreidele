@@ -123,7 +123,7 @@ function SelectionTools({
           </svg>
         </IconButton>
       </div>
-      <div className="flex items-center pl-2 ml-2 border-l-[1px]">
+      <div className="flex items-center pl-2 ml-2 border-l">
         <IconButton onClick={deleteLayers}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path

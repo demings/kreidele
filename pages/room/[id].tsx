@@ -2,6 +2,7 @@ import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
 import { Canvas } from "../../components/Room/Canvas/Canvas";
+import { GuessInput } from "../../components/Room/GuessInput";
 import { LiveAvatars } from "../../components/Room/LiveAvatars";
 import { RoomProvider } from "../../liveblocks.config";
 import { Layer } from "../../shared/types";
@@ -27,18 +28,17 @@ export default function RoomPage({ id }: { id: string }) {
     >
       <ClientSideSuspense fallback={<Loading />}>
         {() => (
-          <div className="grid h-screen place-items-center">
-            <div className="shadow-md grid grid-rows-flow">
-              <div className="bg-white rounded-t-md border-b-[1px]">
-                <LiveAvatars />
+          <div className="flex justify-center">
+            <div className="grid h-screen place-items-center">
+              <div className="w-96 shadow-md grid grid-rows-flow grid-cols-1">
+                <div className="bg-white rounded-t-md border-b">
+                  <LiveAvatars />
+                </div>
+                <Canvas />
+                <div className="border-t">
+                  <GuessInput />
+                </div>
               </div>
-              <Canvas />
-              <input
-                className="shadow-sm rounded-b-md border w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="guess"
-                type="text"
-                placeholder="Atspėk žodį..."
-              />
             </div>
           </div>
         )}

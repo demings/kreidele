@@ -460,7 +460,7 @@ export function Canvas() {
       The designed, simple solution is to use the css property touch-action and set it to none on the container that has the event handler.
       */}
       <div
-        className="touch-none col-span-2 row-span-2 w-96 h-96"
+        className="touch-none col-span-2 row-span-2 h-96"
         ref={canvasDivRef as any}
       >
         <SelectionTools
@@ -471,6 +471,14 @@ export function Canvas() {
           camera={camera}
           setLastUsedColor={setLastUsedColor}
         />
+        <ToolsBar
+          canvasState={canvasState}
+          setCanvasState={setState}
+          undo={history.undo}
+          redo={history.redo}
+          canUndo={canUndo}
+          canRedo={canRedo}
+        />
         <svg
           className=" bg-slate-50 flex w-full h-full"
           // onWheel={onWheel}
@@ -479,59 +487,46 @@ export function Canvas() {
           onPointerLeave={onPointerLeave}
           onPointerUp={onPointerUp}
         >
-          <g>
-            {layerIds.map((layerId) => (
-              <LayerComponent
-                key={layerId}
-                id={layerId}
-                mode={canvasState.mode}
-                onLayerPointerDown={onLayerPointerDown}
-                selectionColor={layerIdsToColorSelection[layerId]}
-              />
-            ))}
-            {/* Blue square that show the selection of the current users. Also contains the resize handles. */}
-            <SelectionBox
-              onResizeHandlePointerDown={onResizeHandlePointerDown}
-              isAnimated={
-                canvasState.mode !== CanvasMode.Translating &&
-                canvasState.mode !== CanvasMode.Resizing
-              }
+          {layerIds.map((layerId) => (
+            <LayerComponent
+              key={layerId}
+              id={layerId}
+              mode={canvasState.mode}
+              onLayerPointerDown={onLayerPointerDown}
+              selectionColor={layerIdsToColorSelection[layerId]}
             />
-            {/* Selection net that appears when the user is selecting multiple layers at once */}
-            {canvasState.mode === CanvasMode.SelectionNet &&
-              canvasState.current != null && (
-                <rect
-                  className="fill-blue-700 opacity-5"
-                  x={Math.min(canvasState.origin.x, canvasState.current.x)}
-                  y={Math.min(canvasState.origin.y, canvasState.current.y)}
-                  width={Math.abs(canvasState.origin.x - canvasState.current.x)}
-                  height={Math.abs(
-                    canvasState.origin.y - canvasState.current.y
-                  )}
-                />
-              )}
-            <Drafts />
-            {/* Drawing in progress. Still not commited to the storage. */}
-            {pencilDraft != null && pencilDraft.length > 0 && (
-              <Path
-                points={pencilDraft}
-                fill={colorToCss(lastUsedColor)}
-                x={0}
-                y={0}
+          ))}
+          {/* Blue square that show the selection of the current users. Also contains the resize handles. */}
+          <SelectionBox
+            onResizeHandlePointerDown={onResizeHandlePointerDown}
+            isAnimated={
+              canvasState.mode !== CanvasMode.Translating &&
+              canvasState.mode !== CanvasMode.Resizing
+            }
+          />
+          {/* Selection net that appears when the user is selecting multiple layers at once */}
+          {canvasState.mode === CanvasMode.SelectionNet &&
+            canvasState.current != null && (
+              <rect
+                className="fill-blue-700 opacity-5"
+                x={Math.min(canvasState.origin.x, canvasState.current.x)}
+                y={Math.min(canvasState.origin.y, canvasState.current.y)}
+                width={Math.abs(canvasState.origin.x - canvasState.current.x)}
+                height={Math.abs(canvasState.origin.y - canvasState.current.y)}
               />
             )}
-          </g>
+          <Drafts />
+          {/* Drawing in progress. Still not commited to the storage. */}
+          {pencilDraft != null && pencilDraft.length > 0 && (
+            <Path
+              points={pencilDraft}
+              fill={colorToCss(lastUsedColor)}
+              x={0}
+              y={0}
+            />
+          )}
         </svg>
       </div>
-
-      <ToolsBar
-        canvasState={canvasState}
-        setCanvasState={setState}
-        undo={history.undo}
-        redo={history.redo}
-        canUndo={canUndo}
-        canRedo={canRedo}
-      />
     </>
   );
 }

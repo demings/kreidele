@@ -24,7 +24,7 @@ export function ToolsBar({
   canRedo,
 }: Props) {
   return (
-    <div className="absolute bottom-6 right-0 left-0 flex items-center justify-center">
+    <div className="absolute translate-x-14 translate-y-[312px] flex items-center justify-center">
       <div className="shadow-md rounded-xl bg-slate-100 flex items-center content-center">
         <div className="flex items-center justify-center p-3">
           <SelectionButton
