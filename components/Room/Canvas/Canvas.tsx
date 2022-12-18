@@ -349,14 +349,6 @@ export function Canvas() {
     return layerIdsToColorSelection;
   }, [selections]);
 
-  const onWheel = useCallback((e: React.WheelEvent) => {
-    // Pan the camera based on the wheel delta
-    setCamera((camera) => ({
-      x: camera.x - e.deltaX,
-      y: camera.y - e.deltaY,
-    }));
-  }, []);
-
   const onPointerDown = React.useCallback(
     (e: React.PointerEvent) => {
       const point = pointerEventToCanvasPoint(e, camera);
@@ -443,20 +435,19 @@ export function Canvas() {
   );
 
   const canvasDivRef = useRef();
-  const [canvasX, setCanvasX] = useState<number>();
-  const [canvasY, setCanvasY] = useState<number>();
 
-  const getPosition = () => {
-    setCanvasX((canvasDivRef.current as any)?.offsetLeft ?? 0);
-    setCanvasY((canvasDivRef.current as any)?.offsetTop ?? 0);
-  };
+  const setCameraPosition = () =>
+    setCamera({
+      x: (canvasDivRef.current as any)?.offsetLeft ?? 0,
+      y: (canvasDivRef.current as any)?.offsetTop ?? 0,
+    });
 
   useEffect(() => {
     // Get the position of canvas in the beginning
-    getPosition();
+    setCameraPosition();
 
     // Re-calculate X and Y of the red box when the window is resized by the user
-    window.addEventListener("resize", getPosition);
+    window.addEventListener("resize", setCameraPosition);
   }, []);
 
   return (
@@ -479,26 +470,16 @@ export function Canvas() {
           }
           camera={camera}
           setLastUsedColor={setLastUsedColor}
-          offset={{
-            x: canvasX!,
-            y: canvasY!,
-          }}
         />
         <svg
           className=" bg-slate-50 flex w-full h-full"
-          onWheel={onWheel}
+          // onWheel={onWheel}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}
           onPointerUp={onPointerUp}
         >
-          <g
-            style={{
-              transform: `translate(${camera.x - canvasX!}px, ${
-                camera.y - canvasY!
-              }px)`,
-            }}
-          >
+          <g>
             {layerIds.map((layerId) => (
               <LayerComponent
                 key={layerId}

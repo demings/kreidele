@@ -40,7 +40,7 @@ export function Avatar({
         borderRadius,
         ...style,
       }}
-      className="flex relative place-content-center"
+      className="flex relative place-content-center select-none"
       data-tooltip={username}
     >
       <div

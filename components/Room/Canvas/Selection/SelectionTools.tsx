@@ -9,7 +9,6 @@ import ColorPicker from "./ColorPicker";
 type SelectionToolsProps = {
   isAnimated: boolean;
   camera: Camera;
-  offset: { x: number; y: number };
   setLastUsedColor: (color: Color) => void;
 };
 
@@ -17,7 +16,6 @@ function SelectionTools({
   isAnimated,
   camera,
   setLastUsedColor,
-  offset,
 }: SelectionToolsProps) {
   const selection = useSelf((me) => me.presence.selection);
 
@@ -91,8 +89,8 @@ function SelectionTools({
     return null;
   }
 
-  const x = selectionBounds.width / 2 + selectionBounds.x + camera.x - offset.x;
-  const y = selectionBounds.y + camera.y - offset.y;
+  const x = selectionBounds.width / 2 + selectionBounds.x;
+  const y = selectionBounds.y;
   return (
     <div
       className="absolute p-3 rounded-xl shadow-lg flex flex-row bg-slate-50 select-none"
