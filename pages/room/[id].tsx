@@ -41,7 +41,7 @@ export default function RoomPage({ id }: { id: string }) {
                 <div className="bg-white  border-b">
                   <LiveAvatars />
                 </div>
-                <Canvas />
+                <Canvas messages={messages} />
                 <div className="border-t">
                   <GuessInput setMessages={setMessages} />
                 </div>

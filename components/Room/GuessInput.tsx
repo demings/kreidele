@@ -20,6 +20,8 @@ export function GuessInput({ setMessages }: GuessInputProps) {
         onSubmit={(e) => {
           e.preventDefault();
 
+          if (!inputValue) return;
+
           const message: Message = {
             avatarUrl,
             username,
@@ -46,7 +48,7 @@ export function GuessInput({ setMessages }: GuessInputProps) {
           />
           <button
             className="mr-2 py-1 px-2 bg-slate-400 hover:bg-slate-500 text-slate-100 rounded"
-            type="button"
+            type="submit"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -23,6 +23,7 @@ import {
   CanvasState,
   Color,
   LayerType,
+  Message,
   Point,
   Side,
   XYWH,
@@ -44,7 +45,11 @@ import { ToolsBar } from "./ToolsBar/ToolsBar";
 
 const MAX_LAYERS = 100;
 
-export function Canvas() {
+interface CanvasProps {
+  messages: Message[];
+}
+
+export function Canvas({ messages }: CanvasProps) {
   const layerIds = useStorage((root) => root.layerIds);
 
   const pencilDraft = useSelf((me) => me.presence.pencilDraft);
@@ -448,7 +453,7 @@ export function Canvas() {
 
     // Re-calculate X and Y of the red box when the window is resized by the user
     window.addEventListener("resize", setCameraPosition);
-  }, []);
+  }, [messages]);
 
   return (
     <>
