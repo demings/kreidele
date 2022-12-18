@@ -2,21 +2,16 @@ import { memo } from "react";
 import useDeleteLayers from "../../../../hooks/useDeleteLayers";
 import useSelectionBounds from "../../../../hooks/useSelectionBounds";
 import { useMutation, useSelf } from "../../../../liveblocks.config";
-import { Camera, Color } from "../../../../shared/types";
+import { Color } from "../../../../shared/types";
 import IconButton from "../IconButton";
 import ColorPicker from "./ColorPicker";
 
 type SelectionToolsProps = {
   isAnimated: boolean;
-  camera: Camera;
   setLastUsedColor: (color: Color) => void;
 };
 
-function SelectionTools({
-  isAnimated,
-  camera,
-  setLastUsedColor,
-}: SelectionToolsProps) {
+function SelectionTools({ isAnimated, setLastUsedColor }: SelectionToolsProps) {
   const selection = useSelf((me) => me.presence.selection);
 
   /**

@@ -1,33 +1,59 @@
 import { nanoid } from "nanoid";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useEventListener } from "../../liveblocks.config";
+import { EventType, Message } from "../../shared/types";
 import { ChatMessages } from "./ChatMessages";
 
-export function ChatHistory() {
+interface ChatHistoryProps {
+  messages: Message[];
+  setMessages: Dispatch<SetStateAction<Message[]>>;
+}
+
+export function ChatHistory({ messages, setMessages }: ChatHistoryProps) {
+  const bottomRef = useRef();
+
+  useEventListener(({ event }) => {
+    console.log({ event });
+    if ((event as any).type === EventType.Message) {
+      setMessages((messages) => [...messages, (event as any).message]);
+    }
+  });
+
+  useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    (bottomRef.current as any)?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const groupedMessages = messages.reduce((accumulator, current) => {
+    if (accumulator.length === 0) {
+      return [[current]];
+    }
+
+    if (
+      accumulator[accumulator.length - 1][0].avatarUrl === current.avatarUrl
+    ) {
+      accumulator[accumulator.length - 1].push(current);
+      return accumulator;
+    }
+
+    return [...accumulator, [current]];
+  }, [] as Message[][]);
+
   return (
-    <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col">
+    <div className="flex-1 px-4 pt-2 justify-between flex flex-col">
       <div
         id="messages"
-        className="flex flex-col space-y-3 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+        className="flex flex-col space-y-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
       >
-        <ChatMessages
-          avatarUrl="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-          messages={["Labas", "Ką tu?"]}
-          username="temp"
-          key={nanoid()}
-        />
-
-        <ChatMessages
-          avatarUrl="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-          messages={["Nk"]}
-          username="temp"
-          key={nanoid()}
-        />
-
-        <ChatMessages
-          avatarUrl="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-          messages={["Ok"]}
-          username="temp"
-          key={nanoid()}
-        />
+        {groupedMessages.map((group) => (
+          <ChatMessages
+            avatarUrl={group[0].avatarUrl}
+            messages={group.map((m) => m.text)}
+            username={group[0].username}
+            key={nanoid()}
+          />
+        ))}
+        <div ref={bottomRef as never} />
       </div>
     </div>
   );

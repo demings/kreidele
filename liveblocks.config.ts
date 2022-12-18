@@ -57,5 +57,7 @@ export const {
     useSelf,
     useStorage,
     useUpdateMyPresence,
+    useBroadcastEvent,
+    useEventListener,
   },
 } = createRoomContext<Presence, Storage /* UserMeta, RoomEvent */>(client);

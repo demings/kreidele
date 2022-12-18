@@ -20,6 +20,16 @@ export type Camera = {
   y: number;
 };
 
+export type Message = {
+  username: string;
+  avatarUrl: string;
+  text: string;
+};
+
+export enum EventType {
+  Message,
+}
+
 export type Layer = RectangleLayer | EllipseLayer | PathLayer;
 
 export type RectangleLayer = {

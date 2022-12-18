@@ -468,7 +468,6 @@ export function Canvas() {
             canvasState.mode !== CanvasMode.Translating &&
             canvasState.mode !== CanvasMode.Resizing
           }
-          camera={camera}
           setLastUsedColor={setLastUsedColor}
         />
         <ToolsBar
