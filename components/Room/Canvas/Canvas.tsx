@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import useDeleteLayers from "../../hooks/useDeleteLayers";
+import useDeleteLayers from "../../../hooks/useDeleteLayers";
 import {
   useCanRedo,
   useCanUndo,
@@ -16,7 +16,7 @@ import {
   useOthersMapped,
   useSelf,
   useStorage,
-} from "../../liveblocks.config";
+} from "../../../liveblocks.config";
 import {
   Camera,
   CanvasMode,
@@ -26,7 +26,7 @@ import {
   Point,
   Side,
   XYWH,
-} from "../../shared/types";
+} from "../../../shared/types";
 import {
   colorToCss,
   connectionIdToColor,
@@ -34,13 +34,13 @@ import {
   penPointsToPathLayer,
   pointerEventToCanvasPoint,
   resizeBounds,
-} from "../../shared/utils";
-import LayerComponent from "../LayerComponent";
-import MultiplayerGuides from "../MultiplayerGuides";
-import Path from "../Path";
-import SelectionBox from "../SelectionBox";
-import SelectionTools from "../SelectionTools";
-import { ToolsBar } from "../ToolsBar/ToolsBar";
+} from "../../../shared/utils";
+import LayerComponent from "./LayerComponent";
+import MultiplayerGuides from "./MultiplayerGuides";
+import Path from "./Path";
+import SelectionBox from "./SelectionBox";
+import SelectionTools from "./SelectionTools";
+import { ToolsBar } from "./ToolsBar/ToolsBar";
 
 const MAX_LAYERS = 100;
 

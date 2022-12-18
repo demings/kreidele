@@ -1,5 +1,5 @@
-import { RectangleLayer } from "../shared/types";
-import { colorToCss } from "../shared/utils";
+import { RectangleLayer } from "../../../shared/types";
+import { colorToCss } from "../../../shared/utils";
 
 type Props = {
   id: string;

@@ -1,7 +1,7 @@
 import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
-import { Canvas } from "../../components/Room/Canvas";
+import { Canvas } from "../../components/Room/Canvas/Canvas";
 import { LiveAvatars } from "../../components/Room/LiveAvatars";
 import { RoomProvider } from "../../liveblocks.config";
 import { Layer } from "../../shared/types";

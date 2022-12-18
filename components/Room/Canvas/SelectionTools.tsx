@@ -1,8 +1,8 @@
 import { memo } from "react";
-import useDeleteLayers from "../hooks/useDeleteLayers";
-import useSelectionBounds from "../hooks/useSelectionBounds";
-import { useMutation, useSelf } from "../liveblocks.config";
-import { Camera, Color } from "../shared/types";
+import useDeleteLayers from "../../../hooks/useDeleteLayers";
+import useSelectionBounds from "../../../hooks/useSelectionBounds";
+import { useMutation, useSelf } from "../../../liveblocks.config";
+import { Camera, Color } from "../../../shared/types";
 import ColorPicker from "./ColorPicker";
 import IconButton from "./IconButton";
 

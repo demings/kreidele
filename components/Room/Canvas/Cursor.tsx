@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { useOther } from "../liveblocks.config";
-import { connectionIdToColor } from "../shared/utils";
+import { useOther } from "../../../liveblocks.config";
+import { connectionIdToColor } from "../../../shared/utils";
 
 type Props = {
   connectionId: number;

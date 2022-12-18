@@ -1,5 +1,5 @@
-import { EllipseLayer } from "../shared/types";
-import { colorToCss } from "../shared/utils";
+import { EllipseLayer } from "../../../shared/types";
+import { colorToCss } from "../../../shared/utils";
 
 type Props = {
   id: string;
