@@ -1,5 +1,6 @@
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { useState } from "react";
 
 export const generateRandomAvatarUrl = () => {
   return `https://avatars.dicebear.com/api/personas/${(Math.random() + 1)
@@ -13,6 +14,8 @@ interface AvatarSelectionProps {
 }
 
 const AvatarSelection = ({ setAvatarUrl, avatarUrl }: AvatarSelectionProps) => {
+  const [spin, setSpin] = useState(false);
+
   return (
     <>
       <div className="flex mb-2 select-none">
@@ -24,8 +27,16 @@ const AvatarSelection = ({ setAvatarUrl, avatarUrl }: AvatarSelectionProps) => {
           height={142}
         />
         <ArrowPathIcon
-          className="w-16 fill-slate-900 hover:animate-spin cursor-pointer"
-          onClick={() => setAvatarUrl(generateRandomAvatarUrl())}
+          className={`w-16 fill-slate-900 cursor-pointer ${
+            spin ? "animate-spin" : ""
+          }`}
+          onClick={() => {
+            if (!spin) {
+              setAvatarUrl(generateRandomAvatarUrl());
+              setSpin(true);
+              setTimeout(() => setSpin(false), 500);
+            }
+          }}
         />
       </div>
     </>
