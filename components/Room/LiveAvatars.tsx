@@ -12,8 +12,6 @@ import { Avatar } from "./Avatar";
  * See pages/api/auth.ts and https://liveblocks.io/docs/api-reference/liveblocks-node#authorize for more information
  */
 
-const MAX_OTHERS = 3;
-
 const animationProps = {
   initial: { width: 0, transformOrigin: "left" },
   animate: { width: "auto", height: "auto" },
@@ -30,15 +28,7 @@ const animationProps = {
 const avatarProps = {
   style: { marginLeft: "-0.45rem" },
   size: 48,
-  outlineWidth: 3,
-  outlineColor: "white",
 };
-
-interface AvatarInfo extends UserInfoCookie {
-  picture: string;
-  name: string;
-  color: [string, string];
-}
 
 export function LiveAvatars() {
   //
@@ -52,7 +42,6 @@ export function LiveAvatars() {
   //
   const others = useOthersMapped((other) => other.info);
   const currentUser = useSelf();
-  const hasMoreUsers = others.length > MAX_OTHERS;
 
   return (
     <div
@@ -64,26 +53,17 @@ export function LiveAvatars() {
       }}
     >
       <AnimatePresence>
-        {hasMoreUsers ? (
-          <motion.div key="count" {...animationProps}>
-            <Avatar {...avatarProps} variant="more" count={others.length - 3} />
-          </motion.div>
-        ) : null}
-
-        {others
-          .slice(0, MAX_OTHERS)
-          .reverse()
-          .map(([key, info]) => {
-            return (
-              <motion.div key={key} {...animationProps}>
-                <AvatarFromInfo info={info as any as AvatarInfo} />
-              </motion.div>
-            );
-          })}
+        {others.map(([key, info]) => {
+          return (
+            <motion.div key={key} {...animationProps}>
+              <AvatarFromInfo info={info as any as UserInfoCookie} />
+            </motion.div>
+          );
+        })}
 
         {currentUser ? (
           <motion.div key="you" {...animationProps}>
-            <AvatarFromInfo info={currentUser.info as any as AvatarInfo} />
+            <AvatarFromInfo info={currentUser.info as any as UserInfoCookie} />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -91,19 +71,7 @@ export function LiveAvatars() {
   );
 }
 
-const AvatarFromInfo = ({ info }: { info: AvatarInfo }) => {
-  const { color, name, picture, username, avatarUrl } =
-    info as any as AvatarInfo;
-  return (
-    <>
-      <Avatar
-        {...avatarProps}
-        variant="avatar"
-        picture={picture}
-        name={username}
-        color={color}
-        avatarUrl={avatarUrl}
-      />
-    </>
-  );
+const AvatarFromInfo = ({ info }: { info: UserInfoCookie }) => {
+  const { username, avatarUrl } = info;
+  return <Avatar {...avatarProps} username={username} avatarUrl={avatarUrl} />;
 };
