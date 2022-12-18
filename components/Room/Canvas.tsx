@@ -40,7 +40,7 @@ import MultiplayerGuides from "../MultiplayerGuides";
 import Path from "../Path";
 import SelectionBox from "../SelectionBox";
 import SelectionTools from "../SelectionTools";
-import ToolsBar from "../ToolsBar";
+import { ToolsBar } from "../ToolsBar/ToolsBar";
 
 const MAX_LAYERS = 100;
 
@@ -447,8 +447,8 @@ export function Canvas() {
   const [canvasY, setCanvasY] = useState<number>();
 
   const getPosition = () => {
-    setCanvasX((canvasDivRef.current as any).offsetLeft);
-    setCanvasY((canvasDivRef.current as any).offsetTop);
+    setCanvasX((canvasDivRef.current as any)?.offsetLeft ?? 0);
+    setCanvasY((canvasDivRef.current as any)?.offsetTop ?? 0);
   };
 
   useEffect(() => {
@@ -485,7 +485,7 @@ export function Canvas() {
           }}
         />
         <svg
-          className=" bg-blue-300 flex w-full h-full"
+          className=" bg-slate-50 flex w-full h-full"
           onWheel={onWheel}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}

@@ -12,38 +12,38 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function RoomPage({ id }: { id: string }) {
   return (
-    <>
-      <RoomProvider
-        id={id}
-        initialPresence={{
-          selection: [],
-          cursor: null,
-          pencilDraft: null,
-          penColor: null,
-        }}
-        initialStorage={{
-          layers: new LiveMap<string, LiveObject<Layer>>(),
-          layerIds: new LiveList(),
-        }}
-      >
-        <ClientSideSuspense fallback={<Loading />}>
-          {() => (
-            <div className="grid h-screen place-items-center">
-              <div className="shadow-md grid grid-rows-flow">
+    <RoomProvider
+      id={id}
+      initialPresence={{
+        selection: [],
+        cursor: null,
+        pencilDraft: null,
+        penColor: null,
+      }}
+      initialStorage={{
+        layers: new LiveMap<string, LiveObject<Layer>>(),
+        layerIds: new LiveList(),
+      }}
+    >
+      <ClientSideSuspense fallback={<Loading />}>
+        {() => (
+          <div className="bg-gradient-to-tr from-slate-600 to-sky-300 grid h-screen place-items-center">
+            <div className="shadow-md grid grid-rows-flow">
+              <div className="bg-white rounded-t-md border-b-[1px]">
                 <LiveAvatars />
-                <Canvas />
-                <input
-                  className="shadow-sm rounded-b-md border w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="guess"
-                  type="text"
-                  placeholder="Atspėk žodį..."
-                />
               </div>
+              <Canvas />
+              <input
+                className="shadow-sm rounded-b-md border w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="guess"
+                type="text"
+                placeholder="Atspėk žodį..."
+              />
             </div>
-          )}
-        </ClientSideSuspense>
-      </RoomProvider>
-    </>
+          </div>
+        )}
+      </ClientSideSuspense>
+    </RoomProvider>
   );
 }
 

@@ -15,7 +15,7 @@ type Props = {
   canRedo: boolean;
 };
 
-export default function ToolsBar({
+export function ToolsBar({
   canvasState,
   setCanvasState,
   undo,
@@ -66,7 +66,7 @@ export default function ToolsBar({
             }
           />
         </div>
-        <div className="w-px bg-slate-300 self-stretch"></div>
+        <div className="w-px bg-slate-300 self-stretch" />
         <div className="flex items-center justify-center p-3">
           <UndoButton onClick={undo} disabled={!canUndo} />
           <RedoButton onClick={redo} disabled={!canRedo} />

@@ -1,5 +1,5 @@
 import Cors from "cors";
-import { randomUUID } from "crypto";
+import { nanoid } from "nanoid";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Room } from "../../shared/types";
 
@@ -52,7 +52,7 @@ export default async function handler(
         .json({ success: false, message: "room already exists" });
     }
     const data = {
-      id: randomUUID(),
+      id: nanoid(),
       defaultAccesses: ["room:write"],
       metadata: {
         name: request.name,

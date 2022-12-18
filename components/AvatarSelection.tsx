@@ -18,14 +18,16 @@ const AvatarSelection = ({ setAvatarUrl, avatarUrl }: AvatarSelectionProps) => {
 
   return (
     <>
-      <div className="flex mb-2 select-none">
-        <Image
-          // loader={myLoader}
-          src={avatarUrl}
-          alt="Jūsų avataras"
-          width={142}
-          height={142}
-        />
+      <div className="flex select-none">
+        <div className="mb-8">
+          <Image
+            // loader={myLoader}
+            src={avatarUrl}
+            alt="Jūsų avataras"
+            width={142}
+            height={142}
+          />
+        </div>
         <ArrowPathIcon
           className={`w-16 fill-slate-900 cursor-pointer ${
             spin ? "animate-spin" : ""

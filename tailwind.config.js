@@ -12,6 +12,14 @@ module.exports = {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
+      animation: {
+        "pulse-bg-once": "pulse-bg-once 2s ease-in forwards",
+      },
+      keyframes: {
+        "pulse-bg-once": {
+          to: { backgroundColor: "transparent" },
+        },
+      },
     },
   },
   plugins: [],

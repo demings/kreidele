@@ -74,7 +74,7 @@ const Landing = ({
   return (
     <>
       <div className="bg-gradient-to-tr from-slate-600 to-sky-300">
-        <section
+        <div
           id="login"
           className="p-4 pt-0 flex flex-col justify-center min-h-screen max-w-4xl mx-auto"
         >
@@ -87,87 +87,70 @@ const Landing = ({
               height={113}
             />
           </div>
-          <div className="p-6 bg-slate-200 rounded">
-            <div className="flex items-center justify-center font-black m-2 mb-2"></div>
-            <div className="grid grid-cols-2">
-              <div className="p-2">
-                <label className="text-sm font-medium">Vartotojo vardas</label>
-                <input
-                  className="mb-3 px-2 py-1.5
-                  mb-3 mt-1 block w-full px-2 py-1.5 border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
-                  type="text"
-                  name="username"
-                  placeholder="Vartotojo vardas"
-                  onChange={(e) => setUsername(e.target.value)}
-                  value={username}
-                />
-                <label className="text-sm font-medium">
-                  Vartotojo nuotrauka
-                </label>
-                <AvatarSelection
-                  setAvatarUrl={setAvatarUrl}
-                  avatarUrl={avatarUrl}
-                />
-                <button
-                  className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
-                  data-modal-toggle="createRoom"
-                  disabled={!username}
+          <div className="max-h-96 grid grid-cols-2 grid-rows-5 gap-4 p-6 bg-slate-200 rounded">
+            <input
+              className=" block h-11 p-2 w-full border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
+              type="text"
+              name="username"
+              placeholder="Vardas"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+            />
+            <div className="row-span-4 overflow-y-scroll rounded-lg">
+              {rooms.map((r) => (
+                <div
+                  key={r.id}
                   onClick={() => {
-                    setShowRoomCreation(true);
+                    setSelectedRoom(r.id);
                   }}
+                  className={`w-full bg-slate-50 p-2 border rounded-md  ${
+                    selectedRoom === r.id ? "bg-slate-500 text-white" : ""
+                  }`}
+                  id={r.id}
                 >
-                  SUKURTI KAMBARĮ
-                </button>
-              </div>
-              <div className="p-2">
-                <label className="text-sm font-medium">
-                  Pasirinkti kambarį
-                </label>
-                <div className="bg-white mt-2 overflow-y-scroll	h-52 rounded-lg">
-                  {rooms.map((r) => (
-                    <div
-                      key={r.id}
-                      onClick={() => {
-                        setSelectedRoom(r.id);
-                      }}
-                      className={`w-full bg-slate-300 p-2 border rounded-md  ${
-                        selectedRoom === r.id
-                          ? "bg-gradient-to-r from-slate-700 to-slate-900 text-white"
-                          : ""
-                      }`}
-                      id={r.id}
-                    >
-                      {r.metadata.name || r.id}
-                    </div>
-                  ))}
+                  {r.metadata.name || r.id}
                 </div>
-                <button
-                  className="mt-4 w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-800 to-slate-900 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25"
-                  disabled={!username || !selectedRoom}
-                  onClick={() => {
-                    play();
-                  }}
-                >
-                  ŽAISTI
-                </button>
-              </div>
+              ))}
             </div>
+            <div className="row-span-3">
+              <AvatarSelection
+                setAvatarUrl={setAvatarUrl}
+                avatarUrl={avatarUrl}
+              />
+            </div>
+            <button
+              className="w-full rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25"
+              data-modal-toggle="createRoom"
+              disabled={!username}
+              onClick={() => {
+                setShowRoomCreation(true);
+              }}
+            >
+              SUKURTI KAMBARĮ
+            </button>
+            <button
+              className="w-full rounded-md shadow-lg bg-gradient-to-r from-slate-800 to-slate-900 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25"
+              disabled={!username || !selectedRoom}
+              onClick={() => {
+                play();
+              }}
+            >
+              ŽAISTI
+            </button>
           </div>
-        </section>
+        </div>
       </div>
       <Modal
-        title="Naujo kambario sukūrimas"
+        title="Naujo kambario kūrimas"
         active={showRoomCreation}
         onClose={() => setShowRoomCreation(false)}
       >
         <div className="w-full">
-          <label className="text-sm font-medium">Naujo kambario vardas</label>
           <input
-            className="mb-3 px-2 py-1.5
-                  mb-3 mt-1 block w-full px-2 py-1.5 border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
+            className="mb-3 px-2 py-1.5 mt-1 block w-full border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
             type="text"
             name="newRoomName"
-            placeholder="Naujo kambario vardas"
+            placeholder="Pavadinimas"
             onChange={(e) =>
               setRoomCreationConfiguration({
                 name: e.target.value,
@@ -177,9 +160,9 @@ const Landing = ({
             value={roomCreationConfiguration.name}
           />
         </div>
-        <div className="w-full mb-2">
+        <div className="w-full mb-3">
           <label className="inline-flex relative items-center cursor-pointer">
-            <span className="mr-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            <span className="mr-3 text-sm font-medium text-gray-900">
               Privatus
             </span>
             <input
@@ -193,7 +176,7 @@ const Landing = ({
                 });
               }}
             />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[68px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-focus:ring-3 peer-focus:ring-slate-300  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[68px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-500"></div>
           </label>
         </div>
         <div className="w-full">
@@ -209,7 +192,7 @@ const Landing = ({
             <span className="absolute top-0 bottom-0 right-0 px-4"></span>
           </div>
           <button
-            className={`w-full py-5 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-2xl disabled:opacity-25 ${
+            className={`w-full py-3 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25 ${
               showError ? " from-red-600 to-red-800" : ""
             }`}
             data-modal-toggle="createRoom"
@@ -218,7 +201,7 @@ const Landing = ({
               createRoom();
             }}
           >
-            SUKURTI KAMBARĮ
+            SUKURTI
           </button>
         </div>
       </Modal>

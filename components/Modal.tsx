@@ -45,7 +45,7 @@ const Modal = ({ title, active, onClose, children }: ModalProps) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="flex justify-between mb-8">
+                  <div className="flex justify-between mb-2">
                     <h2 className="text-lg font-bold">{title}</h2>
                     <div className="self-end">
                       <XMarkIcon

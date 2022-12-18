@@ -20,7 +20,6 @@ export function Avatar({
   username,
   avatarUrl,
   size = 52,
-  statusColor = "",
   outlineColor = "",
   outlineWidth = 0,
   borderRadius = 9999,
@@ -48,12 +47,7 @@ export function Avatar({
         borderRadius={borderRadius}
       />
 
-      {statusColor ? (
-        <span
-          style={{ backgroundColor: statusColor }}
-          className="block absolute right-0 bottom-0 w-2 h-2 rounded-full"
-        />
-      ) : null}
+      <span className="bg-green-600 block absolute right-2 bottom-0 w-2 h-2 rounded-full animate-pulse-bg-once" />
     </div>
   );
 }

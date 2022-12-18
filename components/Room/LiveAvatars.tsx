@@ -51,6 +51,7 @@ export function LiveAvatars() {
         paddingLeft: "0.75rem",
         overflow: "hidden",
       }}
+      className="m-2"
     >
       <AnimatePresence>
         {others.map(([key, info]) => {
