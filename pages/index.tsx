@@ -6,6 +6,7 @@ import { useState } from "react";
 import logoPic from "../public/images/logo.png";
 import { Room } from "../shared/types";
 
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { GetServerSideProps } from "next";
 import AvatarSelection, {
   generateRandomAvatarUrl,
@@ -29,6 +30,7 @@ const Landing = ({
   const [showRoomCreation, setShowRoomCreation] = useState(false);
   const [username, setUsername] = useState<string>(usernameFromCookie ?? "");
   const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [roomCreationConfiguration, setRoomCreationConfiguration] = useState({
     name: "",
@@ -50,6 +52,7 @@ const Landing = ({
   };
 
   const createRoom = async () => {
+    setLoading(true);
     setUserCookies();
     const data = {
       name: roomCreationConfiguration.name,
@@ -61,6 +64,7 @@ const Landing = ({
     });
     const responseAnswer = await response.json();
     if (!responseAnswer.success) {
+      setLoading(false);
       setShowError(true);
     } else {
       setShowError(false);
@@ -145,7 +149,9 @@ const Landing = ({
       >
         <div className="w-full">
           <input
-            className="mb-3 px-2 py-1.5 mt-1 block w-full border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400"
+            className={`mb-1 px-2 py-1.5 mt-1 block w-full border border-slate-300 rounded-md text-sm shadow-sm placeholder-gray-400 ${
+              showError ? " border-red-800" : ""
+            }`}
             type="text"
             name="newRoomName"
             placeholder="Pavadinimas"
@@ -157,6 +163,17 @@ const Landing = ({
             }
             value={roomCreationConfiguration.name}
           />
+          <div
+            className={` text-red-700 relative mb-2 ${
+              showError ? "" : "hidden"
+            }`}
+            role="alert"
+          >
+            <span className="block text-sm italic">
+              Toks kambario vardas jau užimtas
+            </span>
+            <span className="absolute top-0 bottom-0 right-0 px-4"></span>
+          </div>
         </div>
         <div className="w-full mb-3">
           <label className="inline-flex relative items-center cursor-pointer">
@@ -178,29 +195,30 @@ const Landing = ({
           </label>
         </div>
         <div className="w-full">
-          <div
-            className={`bg-red-100 border border-red-400 text-red-700 px-4 rounded relative mb-2 ${
-              showError ? "" : "hidden"
-            }`}
-            role="alert"
-          >
-            <span className="block text-md">
-              Toks kambario vardas jau užimtas
-            </span>
-            <span className="absolute top-0 bottom-0 right-0 px-4"></span>
-          </div>
-          <button
-            className={`w-full py-3 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25 ${
-              showError ? " from-red-600 to-red-800" : ""
-            }`}
-            data-modal-toggle="createRoom"
-            disabled={!username}
-            onClick={() => {
-              createRoom();
-            }}
-          >
-            SUKURTI
-          </button>
+          {loading ? (
+            <button
+              className={`w-full py-3 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25 disabled cursor-not-allowed`}
+              disabled
+            >
+              <label>
+                <ArrowPathIcon
+                  className="animate-spin h-6 w-6 inline -mt-1"
+                  viewBox="0 0 24 24"
+                />{" "}
+                KURIAMAS KAMBARYS
+              </label>
+            </button>
+          ) : (
+            <button
+              className={`w-full py-3 rounded-md shadow-lg bg-gradient-to-r from-slate-600 to-slate-700 font-medium text-gray-100 block transition duration-300 text-xl disabled:opacity-25`}
+              disabled={!username}
+              onClick={() => {
+                createRoom();
+              }}
+            >
+              SUKURTI
+            </button>
+          )}
         </div>
       </Modal>
     </>

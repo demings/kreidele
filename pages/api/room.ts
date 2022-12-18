@@ -73,7 +73,6 @@ export default async function handler(
     let publicRooms = answer.data.filter((el: Room) => {
       return el.metadata.private === "false";
     });
-    console.log(publicRooms);
     res.status(200).json({ success: publicRooms });
   } else {
     res.status(200).json({ message: "This method is not implemented" });

@@ -16,8 +16,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     getCookie("user", { req, res })?.toString() ?? "{}"
   ) as UserInfoCookie;
 
-  console.log({ userInfoCookie });
-
   const response = await authorize({
     room,
     secret: API_KEY,
