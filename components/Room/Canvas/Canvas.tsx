@@ -49,9 +49,11 @@ const MAX_LAYERS = 100;
 export function Canvas({
   messages,
   currentWord,
+  drawingEnabled,
 }: {
   messages: Message[];
   currentWord?: string;
+  drawingEnabled: boolean;
 }) {
   const layerIds = useStorage((root) => root.layerIds);
 
@@ -359,18 +361,20 @@ export function Canvas({
 
   const onPointerDown = React.useCallback(
     (e: React.PointerEvent) => {
-      const point = pointerEventToCanvasPoint(e, camera);
+      if (drawingEnabled) {
+        const point = pointerEventToCanvasPoint(e, camera);
 
-      if (canvasState.mode === CanvasMode.Inserting) {
-        return;
+        if (canvasState.mode === CanvasMode.Inserting) {
+          return;
+        }
+
+        if (canvasState.mode === CanvasMode.Pencil) {
+          startDrawing(point, e.pressure);
+          return;
+        }
+
+        setState({ origin: point, mode: CanvasMode.Pressing });
       }
-
-      if (canvasState.mode === CanvasMode.Pencil) {
-        startDrawing(point, e.pressure);
-        return;
-      }
-
-      setState({ origin: point, mode: CanvasMode.Pressing });
     },
     [camera, canvasState.mode, setState, startDrawing]
   );
@@ -378,19 +382,21 @@ export function Canvas({
   const onPointerMove = useMutation(
     ({ setMyPresence }, e: React.PointerEvent) => {
       e.preventDefault();
-      const current = pointerEventToCanvasPoint(e, camera);
-      if (canvasState.mode === CanvasMode.Pressing) {
-        startMultiSelection(current, canvasState.origin);
-      } else if (canvasState.mode === CanvasMode.SelectionNet) {
-        updateSelectionNet(current, canvasState.origin);
-      } else if (canvasState.mode === CanvasMode.Translating) {
-        translateSelectedLayers(current);
-      } else if (canvasState.mode === CanvasMode.Resizing) {
-        resizeSelectedLayer(current);
-      } else if (canvasState.mode === CanvasMode.Pencil) {
-        continueDrawing(current, e);
+      if (drawingEnabled) {
+        const current = pointerEventToCanvasPoint(e, camera);
+        if (canvasState.mode === CanvasMode.Pressing) {
+          startMultiSelection(current, canvasState.origin);
+        } else if (canvasState.mode === CanvasMode.SelectionNet) {
+          updateSelectionNet(current, canvasState.origin);
+        } else if (canvasState.mode === CanvasMode.Translating) {
+          translateSelectedLayers(current);
+        } else if (canvasState.mode === CanvasMode.Resizing) {
+          resizeSelectedLayer(current);
+        } else if (canvasState.mode === CanvasMode.Pencil) {
+          continueDrawing(current, e);
+        }
+        setMyPresence({ cursor: current });
       }
-      setMyPresence({ cursor: current });
     },
     [
       camera,
@@ -410,26 +416,28 @@ export function Canvas({
 
   const onPointerUp = useMutation(
     ({}, e) => {
-      const point = pointerEventToCanvasPoint(e, camera);
+      if (drawingEnabled) {
+        const point = pointerEventToCanvasPoint(e, camera);
 
-      if (
-        canvasState.mode === CanvasMode.None ||
-        canvasState.mode === CanvasMode.Pressing
-      ) {
-        unselectLayers();
-        setState({
-          mode: CanvasMode.None,
-        });
-      } else if (canvasState.mode === CanvasMode.Pencil) {
-        insertPath();
-      } else if (canvasState.mode === CanvasMode.Inserting) {
-        insertLayer(canvasState.layerType, point);
-      } else {
-        setState({
-          mode: CanvasMode.None,
-        });
+        if (
+          canvasState.mode === CanvasMode.None ||
+          canvasState.mode === CanvasMode.Pressing
+        ) {
+          unselectLayers();
+          setState({
+            mode: CanvasMode.None,
+          });
+        } else if (canvasState.mode === CanvasMode.Pencil) {
+          insertPath();
+        } else if (canvasState.mode === CanvasMode.Inserting) {
+          insertLayer(canvasState.layerType, point);
+        } else {
+          setState({
+            mode: CanvasMode.None,
+          });
+        }
+        history.resume();
       }
-      history.resume();
     },
     [
       camera,
@@ -471,22 +479,26 @@ export function Canvas({
         className="touch-none col-span-2 row-span-2 h-96"
         ref={canvasDivRef as any}
       >
-        <SelectionTools
-          isAnimated={
-            canvasState.mode !== CanvasMode.Translating &&
-            canvasState.mode !== CanvasMode.Resizing
-          }
-          setLastUsedColor={setLastUsedColor}
-        />
-        {currentWord && <CurrentWord word={currentWord} />}
-        <ToolsBar
-          canvasState={canvasState}
-          setCanvasState={setState}
-          undo={history.undo}
-          redo={history.redo}
-          canUndo={canUndo}
-          canRedo={canRedo}
-        />
+        {drawingEnabled && (
+          <>
+            <SelectionTools
+              isAnimated={
+                canvasState.mode !== CanvasMode.Translating &&
+                canvasState.mode !== CanvasMode.Resizing
+              }
+              setLastUsedColor={setLastUsedColor}
+            />
+            {currentWord && <CurrentWord word={currentWord} />}
+            <ToolsBar
+              canvasState={canvasState}
+              setCanvasState={setState}
+              undo={history.undo}
+              redo={history.redo}
+              canUndo={canUndo}
+              canRedo={canRedo}
+            />
+          </>
+        )}
         <svg
           className=" bg-slate-50 flex w-full h-full"
           onPointerDown={onPointerDown}

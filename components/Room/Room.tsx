@@ -112,7 +112,11 @@ export function Room({ hostId }: { hostId: string }) {
               drawerId={gameState?.drawerId}
             />
           </div>
-          <Canvas messages={messages} currentWord={gameState?.currentWord} />
+          <Canvas
+            messages={messages}
+            currentWord={gameState?.currentWord}
+            drawingEnabled={gameState?.drawerId === currentUser.avatarUrl}
+          />
           <div className="border-t">
             <GuessInput setMessages={setMessages} />
           </div>
