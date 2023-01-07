@@ -29,6 +29,7 @@ export function Avatar({
     }
   };
 
+  // TODO: add tooltip with username
   return (
     <div
       className="flex relative place-content-center select-none rounded-full"

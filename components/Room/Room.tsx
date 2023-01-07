@@ -10,7 +10,6 @@ import {
 } from "../../liveblocks.config";
 import { EventType, GameState, Message } from "../../shared/types";
 import { Canvas } from "./Canvas/Canvas";
-import { CurrentWord } from "./Canvas/CurrentWord";
 import { ChatHistory } from "./ChatHistory";
 import { GuessInput } from "./GuessInput";
 import { LiveAvatars } from "./LiveAvatars";
@@ -34,6 +33,7 @@ export function Room({ hostId }: { hostId: string }) {
 
   useEventListener(({ event }) => {
     console.log({ event });
+
     if ((event as any).type === EventType.Message) {
       setMessages((messages) => [...messages, (event as any).message]);
     }
@@ -112,12 +112,7 @@ export function Room({ hostId }: { hostId: string }) {
               drawerId={gameState?.drawerId}
             />
           </div>
-          {gameState?.currentWord && (
-            <div className="col-span-2">
-              <CurrentWord word={gameState.currentWord} />
-            </div>
-          )}
-          <Canvas messages={messages} />
+          <Canvas messages={messages} currentWord={gameState?.currentWord} />
           <div className="border-t">
             <GuessInput setMessages={setMessages} />
           </div>

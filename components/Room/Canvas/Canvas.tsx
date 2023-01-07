@@ -36,6 +36,7 @@ import {
   pointerEventToCanvasPoint,
   resizeBounds,
 } from "../../../shared/utils";
+import { CurrentWord } from "./CurrentWord";
 import Drafts from "./Drafts";
 import LayerComponent from "./LayerComponent";
 import Path from "./Path";
@@ -45,11 +46,13 @@ import { ToolsBar } from "./ToolsBar/ToolsBar";
 
 const MAX_LAYERS = 100;
 
-interface CanvasProps {
+export function Canvas({
+  messages,
+  currentWord,
+}: {
   messages: Message[];
-}
-
-export function Canvas({ messages }: CanvasProps) {
+  currentWord?: string;
+}) {
   const layerIds = useStorage((root) => root.layerIds);
 
   const pencilDraft = useSelf((me) => me.presence.pencilDraft);
@@ -448,10 +451,10 @@ export function Canvas({ messages }: CanvasProps) {
     });
 
   useEffect(() => {
-    // Get the position of canvas in the beginning
+    // get the position of canvas in the beginning
     setCameraPosition();
 
-    // Re-calculate X and Y of the red box when the window is resized by the user
+    // re-calculate X and Y of the red box when the window is resized by the user
     window.addEventListener("resize", setCameraPosition);
   }, [messages]);
 
@@ -475,6 +478,7 @@ export function Canvas({ messages }: CanvasProps) {
           }
           setLastUsedColor={setLastUsedColor}
         />
+        {currentWord && <CurrentWord word={currentWord} />}
         <ToolsBar
           canvasState={canvasState}
           setCanvasState={setState}
