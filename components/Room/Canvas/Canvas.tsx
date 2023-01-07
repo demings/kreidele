@@ -36,7 +36,6 @@ import {
   pointerEventToCanvasPoint,
   resizeBounds,
 } from "../../../shared/utils";
-import { CurrentWord } from "./CurrentWord";
 import Drafts from "./Drafts";
 import LayerComponent from "./LayerComponent";
 import Path from "./Path";
@@ -48,11 +47,9 @@ const MAX_LAYERS = 100;
 
 export function Canvas({
   guesses,
-  currentWord,
   drawingEnabled,
 }: {
   guesses: Guess[];
-  currentWord?: string;
   drawingEnabled: boolean;
 }) {
   const layerIds = useStorage((root) => root.layerIds);
@@ -485,7 +482,6 @@ export function Canvas({
               }
               setLastUsedColor={setLastUsedColor}
             />
-            {currentWord && <CurrentWord word={currentWord} />}
             <ToolsBar
               canvasState={canvasState}
               setCanvasState={setState}

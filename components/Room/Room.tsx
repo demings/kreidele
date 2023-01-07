@@ -11,6 +11,7 @@ import {
 import { EventType, GameState, Guess } from "../../shared/types";
 import { processString } from "../../shared/utils";
 import { Canvas } from "./Canvas/Canvas";
+import { CurrentWord } from "./Canvas/CurrentWord";
 import { GuessHistory } from "./GuessHistory";
 import { GuessInput } from "./GuessInput";
 import { LiveAvatars } from "./LiveAvatars";
@@ -175,12 +176,13 @@ export function Room({ hostId }: { hostId: string }) {
               drawerId={gameState?.drawerId}
             />
           </div>
+          {currentWord && (
+            <div className="col-span-2 row-span-2">
+              <CurrentWord word={currentWord} />
+            </div>
+          )}
           <div className="col-span-2 row-span-2">
-            <Canvas
-              guesses={guesses}
-              currentWord={currentWord}
-              drawingEnabled={drawingEnabled}
-            />
+            <Canvas guesses={guesses} drawingEnabled={drawingEnabled} />
           </div>
           {!drawingEnabled && <GuessInput setGuesses={setGuesses} />}
         </div>
