@@ -1,17 +1,17 @@
 import { nanoid } from "nanoid";
 import { useEffect, useRef } from "react";
-import { Message } from "../../shared/types";
-import { MessagesGroup } from "./MessagesGroup";
+import { Guess } from "../../shared/types";
+import { GuessGroup } from "./GuessGroup";
 
-export function ChatHistory({ messages }: { messages: Message[] }) {
+export function GuessHistory({ guesses }: { guesses: Guess[] }) {
   const bottomRef = useRef();
 
   useEffect(() => {
-    // 👇️ scroll to bottom every time messages change
+    // 👇️ scroll to bottom every time guesses change
     (bottomRef.current as any)?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [guesses]);
 
-  const groupedMessages = messages.reduce((accumulator, current) => {
+  const groupedGuesses = guesses.reduce((accumulator, current) => {
     if (accumulator.length === 0) {
       return [[current]];
     }
@@ -24,16 +24,16 @@ export function ChatHistory({ messages }: { messages: Message[] }) {
     }
 
     return [...accumulator, [current]];
-  }, [] as Message[][]);
+  }, [] as Guess[][]);
 
   return (
     <div className="flex-1 px-4 pt-2 justify-between flex flex-col">
       <div
-        id="messages"
+        id="guesses"
         className="flex flex-col space-y-1 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
       >
-        {groupedMessages.map((group) => (
-          <MessagesGroup messages={group} key={nanoid()} />
+        {groupedGuesses.map((group) => (
+          <GuessGroup guesses={group} key={nanoid()} />
         ))}
         <div ref={bottomRef as never} />
       </div>

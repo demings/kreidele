@@ -1,13 +1,13 @@
 import { nanoid } from "nanoid";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useBroadcastEvent, useSelf } from "../../liveblocks.config";
-import { EventType, Message, UserInfoCookie } from "../../shared/types";
+import { EventType, Guess, UserInfoCookie } from "../../shared/types";
 
 interface GuessInputProps {
-  setMessages: Dispatch<SetStateAction<Message[]>>;
+  setGuesses: Dispatch<SetStateAction<Guess[]>>;
 }
 
-export function GuessInput({ setMessages }: GuessInputProps) {
+export function GuessInput({ setGuesses }: GuessInputProps) {
   const [inputValue, setInputValue] = useState("");
 
   const broadcast = useBroadcastEvent();
@@ -23,18 +23,18 @@ export function GuessInput({ setMessages }: GuessInputProps) {
 
           if (!inputValue) return;
 
-          const message: Message = {
+          const guess: Guess = {
             id: nanoid(),
             avatarUrl,
             username,
             text: inputValue,
           };
 
-          setMessages((messages) => [...messages, message]);
+          setGuesses((guesses) => [...guesses, guess]);
 
           broadcast({
-            type: EventType.Message,
-            message,
+            type: EventType.Guess,
+            guess,
           } as never);
 
           setInputValue("");

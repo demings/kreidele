@@ -28,7 +28,7 @@ export type Camera = {
   y: number;
 };
 
-export type Message = {
+export type Guess = {
   id: string;
   username: string;
   avatarUrl: string;
@@ -37,7 +37,7 @@ export type Message = {
 };
 
 export enum EventType {
-  Message,
+  Guess,
   GuessIsCorrect,
   GameStateUpdate,
 }

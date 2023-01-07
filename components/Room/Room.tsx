@@ -8,16 +8,16 @@ import {
   UsersMapped,
   useSelf,
 } from "../../liveblocks.config";
-import { EventType, GameState, Message } from "../../shared/types";
+import { EventType, GameState, Guess } from "../../shared/types";
 import { processString } from "../../shared/utils";
 import { Canvas } from "./Canvas/Canvas";
-import { ChatHistory } from "./ChatHistory";
+import { GuessHistory } from "./GuessHistory";
 import { GuessInput } from "./GuessInput";
 import { LiveAvatars } from "./LiveAvatars";
 
 export function Room({ hostId }: { hostId: string }) {
   const [currentWord, setCurrentWord] = useState<string>();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [guesses, setGuesses] = useState<Guess[]>([]);
   const [gameState, setGameState] = useState<GameState>();
 
   //
@@ -51,35 +51,33 @@ export function Room({ hostId }: { hostId: string }) {
       }
     };
 
-    if ((event as any).type === EventType.Message) {
-      let message = (event as any).message as Message;
+    if ((event as any).type === EventType.Guess) {
+      let guess = (event as any).guess as Guess;
 
       if (
         drawingEnabled &&
         currentWord &&
-        processString(currentWord) === processString(message.text)
+        processString(currentWord) === processString(guess.text)
       ) {
-        message.correct = true;
-        console.log("Broadcasting correct", message);
+        guess.correct = true;
+        console.log("Broadcasting correct", guess);
         broadcast({
           type: EventType.GuessIsCorrect,
-          message,
+          guess,
         } as never);
         setNewDrawer();
       }
 
-      setMessages((messages) => [...messages, message]);
+      setGuesses((guesses) => [...guesses, guess]);
     }
 
     if ((event as any).type === EventType.GuessIsCorrect) {
-      setMessages((messages) => {
-        const message = messages.find(
-          (x) => x.id === (event as any).message.id
-        );
-        if (message) {
-          message.correct = true;
+      setGuesses((guesses) => {
+        const guess = guesses.find((x) => x.id === (event as any).guess.id);
+        if (guess) {
+          guess.correct = true;
         }
-        return messages;
+        return guesses;
       });
 
       if (isHost(currentUser, hostId)) {
@@ -161,14 +159,14 @@ export function Room({ hostId }: { hostId: string }) {
     <div className="flex justify-center">
       <div className="grid h-screen place-items-center">
         <div className="w-96 shadow-md grid grid-rows-flow grid-cols-1">
-          {messages.length > 0 && (
+          {guesses.length > 0 && (
             <div className="col-span-2 rounded-t-md bg-slate-100 w-96 max-h-60 overflow-y-scroll">
-              <ChatHistory messages={messages} />
+              <GuessHistory guesses={guesses} />
             </div>
           )}
           <div
             className={`bg-white  border-b ${
-              messages.length === 0 ? "rounded-t-md" : ""
+              guesses.length === 0 ? "rounded-t-md" : ""
             }`}
           >
             <LiveAvatars
@@ -179,12 +177,12 @@ export function Room({ hostId }: { hostId: string }) {
           </div>
           <div className="col-span-2 row-span-2">
             <Canvas
-              messages={messages}
+              guesses={guesses}
               currentWord={currentWord}
               drawingEnabled={drawingEnabled}
             />
           </div>
-          {!drawingEnabled && <GuessInput setMessages={setMessages} />}
+          {!drawingEnabled && <GuessInput setGuesses={setGuesses} />}
         </div>
       </div>
     </div>

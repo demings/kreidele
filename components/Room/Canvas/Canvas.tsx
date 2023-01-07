@@ -22,8 +22,8 @@ import {
   CanvasMode,
   CanvasState,
   Color,
+  Guess,
   LayerType,
-  Message,
   Point,
   Side,
   XYWH,
@@ -47,11 +47,11 @@ import { ToolsBar } from "./ToolsBar/ToolsBar";
 const MAX_LAYERS = 100;
 
 export function Canvas({
-  messages,
+  guesses,
   currentWord,
   drawingEnabled,
 }: {
-  messages: Message[];
+  guesses: Guess[];
   currentWord?: string;
   drawingEnabled: boolean;
 }) {
@@ -464,7 +464,7 @@ export function Canvas({
 
     // re-calculate X and Y of the red box when the window is resized by the user
     window.addEventListener("resize", setCameraPosition);
-  }, [messages]);
+  }, [guesses]);
 
   return (
     <>
