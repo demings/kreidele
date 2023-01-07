@@ -3,7 +3,7 @@ import { useMutation, useSelf } from "../liveblocks.config";
 /**
  * Delete all the selected layers.
  */
-export default function useDeleteLayers() {
+export default function useDeleteSelectedLayers() {
   const selection = useSelf((me) => me.presence.selection);
   return useMutation(
     ({ storage, setMyPresence }) => {

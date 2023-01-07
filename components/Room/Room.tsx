@@ -1,5 +1,6 @@
 import randomWords from "random-words";
 import { useEffect, useState } from "react";
+import useDeleteAllLayers from "../../hooks/useDeleteAllLayers";
 import {
   useBroadcastEvent,
   useEventListener,
@@ -33,6 +34,7 @@ export function Room({ hostId }: { hostId: string }) {
   const others = useOthersMapped((other) => other.info) as never as UsersMapped;
   const currentUser = useSelf((self) => self.info) as UserMeta;
   const broadcast = useBroadcastEvent();
+  const deleteAllLayers = useDeleteAllLayers();
 
   const drawingEnabled = gameState?.drawerId === currentUser.avatarUrl;
 
@@ -40,6 +42,8 @@ export function Room({ hostId }: { hostId: string }) {
     console.log({ event });
 
     const setNewDrawer = () => {
+      deleteAllLayers();
+
       if (gameState) {
         setGameState({
           ...gameState,
@@ -182,7 +186,11 @@ export function Room({ hostId }: { hostId: string }) {
             </div>
           )}
           <div className="col-span-2 row-span-2">
-            <Canvas guesses={guesses} drawingEnabled={drawingEnabled} />
+            <Canvas
+              guesses={guesses}
+              drawingEnabled={drawingEnabled}
+              currentWord={currentWord}
+            />
           </div>
           {!drawingEnabled && <GuessInput setGuesses={setGuesses} />}
         </div>

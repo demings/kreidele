@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import useDeleteLayers from "../../../hooks/useDeleteLayers";
+import useDeleteSelectedLayers from "../../../hooks/useDeleteSelectedLayers";
 import {
   useCanRedo,
   useCanUndo,
@@ -48,9 +48,11 @@ const MAX_LAYERS = 100;
 export function Canvas({
   guesses,
   drawingEnabled,
+  currentWord,
 }: {
   guesses: Guess[];
   drawingEnabled: boolean;
+  currentWord?: string;
 }) {
   const layerIds = useStorage((root) => root.layerIds);
 
@@ -68,7 +70,7 @@ export function Canvas({
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
 
-  const deleteLayers = useDeleteLayers();
+  const deleteSelectedLayers = useDeleteSelectedLayers();
 
   /**
    * Hook used to listen to Undo / Redo and delete selected layers
@@ -76,8 +78,9 @@ export function Canvas({
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       switch (e.key) {
+        case "Delete":
         case "Backspace": {
-          deleteLayers();
+          deleteSelectedLayers();
           break;
         }
         case "z": {
@@ -98,7 +101,7 @@ export function Canvas({
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [deleteLayers, history]);
+  }, [deleteSelectedLayers, history]);
 
   /**
    * Select the layer if not already selected and start translating the selection
@@ -461,7 +464,7 @@ export function Canvas({
 
     // re-calculate X and Y of the red box when the window is resized by the user
     window.addEventListener("resize", setCameraPosition);
-  }, [guesses]);
+  }, [guesses, currentWord]);
 
   return (
     <>

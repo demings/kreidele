@@ -1,5 +1,5 @@
 import { memo } from "react";
-import useDeleteLayers from "../../../../hooks/useDeleteLayers";
+import useDeleteSelectedLayers from "../../../../hooks/useDeleteSelectedLayers";
 import useSelectionBounds from "../../../../hooks/useSelectionBounds";
 import { useMutation, useSelf } from "../../../../liveblocks.config";
 import { Color } from "../../../../shared/types";
@@ -77,7 +77,7 @@ function SelectionTools({ isAnimated, setLastUsedColor }: SelectionToolsProps) {
     [selection, setLastUsedColor]
   );
 
-  const deleteLayers = useDeleteLayers();
+  const deleteLayers = useDeleteSelectedLayers();
 
   const selectionBounds = useSelectionBounds();
   if (!selectionBounds) {
