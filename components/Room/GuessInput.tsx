@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useBroadcastEvent, useSelf } from "../../liveblocks.config";
 import { EventType, Message, UserInfoCookie } from "../../shared/types";
@@ -15,7 +16,7 @@ export function GuessInput({ setMessages }: GuessInputProps) {
   const { avatarUrl, username } = currentUser.info as any as UserInfoCookie;
 
   return (
-    <div className="w-full rounded-b-md ">
+    <div className="w-full rounded-b-md border-t">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -23,6 +24,7 @@ export function GuessInput({ setMessages }: GuessInputProps) {
           if (!inputValue) return;
 
           const message: Message = {
+            id: nanoid(),
             avatarUrl,
             username,
             text: inputValue,

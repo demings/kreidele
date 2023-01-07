@@ -6,7 +6,6 @@ export type Color = {
 
 export type GameState = {
   drawerId: string;
-  currentWord: string;
   players: {
     id: string;
     score: number;
@@ -30,13 +29,16 @@ export type Camera = {
 };
 
 export type Message = {
+  id: string;
   username: string;
   avatarUrl: string;
   text: string;
+  correct?: boolean;
 };
 
 export enum EventType {
   Message,
+  GuessIsCorrect,
   GameStateUpdate,
 }
 

@@ -475,10 +475,7 @@ export function Canvas({
 
       The designed, simple solution is to use the css property touch-action and set it to none on the container that has the event handler.
       */}
-      <div
-        className="touch-none col-span-2 row-span-2 h-96"
-        ref={canvasDivRef as any}
-      >
+      <div className="touch-none h-96" ref={canvasDivRef as any}>
         {drawingEnabled && (
           <>
             <SelectionTools
@@ -500,7 +497,9 @@ export function Canvas({
           </>
         )}
         <svg
-          className=" bg-slate-50 flex w-full h-full"
+          className={`bg-slate-50 flex w-full h-full ${
+            drawingEnabled ? "rounded-b-md" : ""
+          }`}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}

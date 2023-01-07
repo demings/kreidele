@@ -1,3 +1,4 @@
+import removeAccents from "remove-accents";
 import {
   Camera,
   Color,
@@ -260,4 +261,10 @@ function hexToRgb(hex: string): RGB {
         b: parseInt(result[3], 16),
       }
     : null;
+}
+
+// TODO: clean up unused functions
+
+export function processString(str: string) {
+  return removeAccents(str).toLocaleUpperCase().replace(/\s/g, "");
 }

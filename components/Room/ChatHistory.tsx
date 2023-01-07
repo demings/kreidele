@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { useEffect, useRef } from "react";
 import { Message } from "../../shared/types";
-import { ChatMessages } from "./ChatMessages";
+import { MessagesGroup } from "./MessagesGroup";
 
 export function ChatHistory({ messages }: { messages: Message[] }) {
   const bottomRef = useRef();
@@ -33,12 +33,7 @@ export function ChatHistory({ messages }: { messages: Message[] }) {
         className="flex flex-col space-y-1 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
       >
         {groupedMessages.map((group) => (
-          <ChatMessages
-            avatarUrl={group[0].avatarUrl}
-            messages={group.map((m) => m.text)}
-            username={group[0].username}
-            key={nanoid()}
-          />
+          <MessagesGroup messages={group} key={nanoid()} />
         ))}
         <div ref={bottomRef as never} />
       </div>

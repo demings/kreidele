@@ -39,15 +39,7 @@ export function LiveAvatars({
   drawerId?: string;
 }) {
   return (
-    <div
-      style={{
-        minHeight: avatarProps.size + "px",
-        display: "flex",
-        paddingLeft: "0.75rem",
-        overflow: "hidden",
-      }}
-      className="m-2"
-    >
+    <div className="m-2 min-h-min flex pl-2 overflow-hidden">
       <AnimatePresence>
         {others.map(([key, user]) => {
           return (
