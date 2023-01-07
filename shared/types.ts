@@ -4,6 +4,15 @@ export type Color = {
   b: number;
 };
 
+export type GameState = {
+  drawerId: string;
+  currentWord: string;
+  players: {
+    id: string;
+    score: number;
+  }[];
+};
+
 export type UserInfoCookie = {
   username: string;
   avatarUrl: string;

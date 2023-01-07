@@ -8,7 +8,7 @@ import {
   UsersMapped,
   useSelf,
 } from "../../liveblocks.config";
-import { EventType, Message } from "../../shared/types";
+import { EventType, GameState, Message } from "../../shared/types";
 import { Canvas } from "./Canvas/Canvas";
 import { CurrentWord } from "./Canvas/CurrentWord";
 import { ChatHistory } from "./ChatHistory";
@@ -96,7 +96,7 @@ export function Room({ hostId }: { hostId: string }) {
         gameState,
       } as never);
     }
-  }, [gameState, others]);
+  }, [gameState]);
 
   return (
     <div className="flex justify-center">
@@ -106,7 +106,11 @@ export function Room({ hostId }: { hostId: string }) {
             <ChatHistory messages={messages} />
           </div>
           <div className="bg-white  border-b">
-            <LiveAvatars currentUser={currentUser} others={others} />
+            <LiveAvatars
+              currentUser={currentUser}
+              others={others}
+              drawerId={gameState?.drawerId}
+            />
           </div>
           {gameState?.currentWord && (
             <div className="col-span-2">
@@ -122,15 +126,6 @@ export function Room({ hostId }: { hostId: string }) {
     </div>
   );
 }
-
-type GameState = {
-  drawerId: string;
-  currentWord: string;
-  players: {
-    id: string;
-    score: number;
-  }[];
-};
 
 function isHost(user: UserMeta, hostId: string) {
   return user.avatarUrl === hostId;

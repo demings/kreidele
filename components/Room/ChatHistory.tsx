@@ -3,11 +3,7 @@ import { useEffect, useRef } from "react";
 import { Message } from "../../shared/types";
 import { ChatMessages } from "./ChatMessages";
 
-interface ChatHistoryProps {
-  messages: Message[];
-}
-
-export function ChatHistory({ messages }: ChatHistoryProps) {
+export function ChatHistory({ messages }: { messages: Message[] }) {
   const bottomRef = useRef();
 
   useEffect(() => {

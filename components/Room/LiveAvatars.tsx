@@ -32,9 +32,11 @@ const avatarProps = {
 export function LiveAvatars({
   currentUser,
   others,
+  drawerId,
 }: {
   currentUser: UserMeta;
   others: UsersMapped;
+  drawerId?: string;
 }) {
   return (
     <div
@@ -47,17 +49,23 @@ export function LiveAvatars({
       className="m-2"
     >
       <AnimatePresence>
-        {others.map(([key, info]) => {
+        {others.map(([key, user]) => {
           return (
             <motion.div key={key} {...animationProps}>
-              <AvatarFromInfo info={info} />
+              <AvatarFromUser
+                user={user}
+                drawing={user.avatarUrl === drawerId}
+              />
             </motion.div>
           );
         })}
 
         {currentUser ? (
           <motion.div key="you" {...animationProps}>
-            <AvatarFromInfo info={currentUser} />
+            <AvatarFromUser
+              user={currentUser}
+              drawing={currentUser.avatarUrl === drawerId}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -65,7 +73,19 @@ export function LiveAvatars({
   );
 }
 
-const AvatarFromInfo = ({ info }: { info: UserMeta }) => {
-  const { username, avatarUrl } = info;
-  return <Avatar {...avatarProps} username={username} avatarUrl={avatarUrl} />;
+const AvatarFromUser = ({
+  user,
+  drawing,
+}: {
+  user: UserMeta;
+  drawing: boolean;
+}) => {
+  return (
+    <Avatar
+      {...avatarProps}
+      username={user.username}
+      avatarUrl={user.avatarUrl}
+      drawing={drawing}
+    />
+  );
 };
