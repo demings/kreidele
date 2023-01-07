@@ -41,8 +41,6 @@ export default async function handler(
 
     const roomsList = await getRooms();
 
-    // await deleteRooms(roomsList.data.map((room: Room) => room.id));
-
     const found = roomsList.data.some(
       (room: Room) =>
         room.metadata.name == request.name && request.private == false
@@ -80,10 +78,10 @@ export default async function handler(
       (room: Room) => room.metadata.private === "false"
     );
 
-    res.status(200).json({ success: publicRooms });
-  } else {
-    res.status(200).json({ message: "This method is not implemented" });
+    return res.status(200).json({ success: publicRooms });
   }
+
+  return res.status(200).json({ message: "This method is not implemented" });
 }
 
 async function getRooms() {
@@ -94,13 +92,3 @@ async function getRooms() {
     })
   ).json();
 }
-
-// async function deleteRooms(ids: string[]) {
-//   ids.forEach(async (id) => {
-//     const result = await fetch(externalURL + "/" + id, {
-//       method: "DELETE",
-//       headers,
-//     });
-//     console.log(await result.json());
-//   });
-// }

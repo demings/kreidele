@@ -69,7 +69,7 @@ const Landing = ({
       setShowError(true);
     } else {
       setShowError(false);
-      router.push(`room/${responseAnswer.success.id}`);
+      router.push(`/room/${responseAnswer.success.id}`);
     }
   };
 

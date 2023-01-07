@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import randomWords from "random-words";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useDeleteAllLayers from "../../hooks/useDeleteAllLayers";
 import {
   useBroadcastEvent,
@@ -17,10 +18,14 @@ import { GuessHistory } from "./GuessHistory";
 import { GuessInput } from "./GuessInput";
 import { LiveAvatars } from "./LiveAvatars";
 
-export function Room({ hostId }: { hostId: string }) {
+export function Room({ id: roomId, hostId }: { id: string; hostId: string }) {
   const [currentWord, setCurrentWord] = useState<string>();
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [gameState, setGameState] = useState<GameState>();
+  const [allPlayers, setAllPlayers] = useState<UserMeta[]>();
+
+  const allPlayersRef = useRef(allPlayers);
+  allPlayersRef.current = allPlayers;
 
   //
   // RATIONALE:
@@ -35,8 +40,13 @@ export function Room({ hostId }: { hostId: string }) {
   const currentUser = useSelf((self) => self.info) as UserMeta;
   const broadcast = useBroadcastEvent();
   const deleteAllLayers = useDeleteAllLayers();
+  const router = useRouter();
 
   const drawingEnabled = gameState?.drawerId === currentUser.avatarUrl;
+
+  useEffect(() => {
+    setAllPlayers(others.map((o) => o[1]).concat(currentUser));
+  }, [others, currentUser]);
 
   useEventListener(({ event }) => {
     console.log({ event });
@@ -97,45 +107,50 @@ export function Room({ hostId }: { hostId: string }) {
 
   // initialize game state
   useEffect(() => {
-    if (isHost(currentUser, hostId)) {
+    if (isHost(currentUser, hostId) && allPlayers) {
       if (!gameState) {
         setGameState({
-          drawerId: sample(others)[1].avatarUrl,
-          players: others
-            .map((other) => ({
-              id: other[1].avatarUrl,
-              score: 0,
-            }))
-            .concat({
-              id: currentUser.avatarUrl,
-              score: 0,
-            }),
+          drawerId: sample(allPlayers).avatarUrl,
+          players: allPlayers.map((player) => ({
+            id: player.avatarUrl,
+            score: 0,
+          })),
         });
       }
     }
-  }, []);
+  }, [allPlayers]);
 
   // react to player change
   useEffect(() => {
-    if (isHost(currentUser, hostId) && gameState) {
-      setGameState({
-        ...gameState,
-        players: others
-          .map((other) => ({
-            id: other[1].avatarUrl,
-            score:
-              gameState.players.find((p) => p.id === other[1].avatarUrl)
-                ?.score ?? 0,
-          }))
-          .concat({
-            id: currentUser.avatarUrl,
-            score:
-              gameState.players.find((p) => p.id === currentUser.avatarUrl)
-                ?.score ?? 0,
-          }),
-      });
+    if (allPlayers) {
+      if (isHost(currentUser, hostId)) {
+        if (gameState)
+          setGameState({
+            ...gameState,
+            players: allPlayers.map((player) => ({
+              id: player.avatarUrl,
+              score:
+                gameState.players.find((p) => p.id === player.avatarUrl)
+                  ?.score ?? 0,
+            })),
+          });
+      } else {
+        console.log("Someone left/joined");
+        // check if host left after 5s (maybe just refreshing?)
+        setTimeout(() => {
+          if (
+            allPlayersRef.current &&
+            !allPlayersRef.current.some((player) => player.avatarUrl === hostId)
+          ) {
+            console.log("Host left. Deleting room...");
+            fetch(`/api/room/${roomId}`, {
+              method: "DELETE",
+            }).then(() => router.push(`/`));
+          }
+        }, 5000);
+      }
     }
-  }, [others]);
+  }, [allPlayers]);
 
   // react to drawer change
   useEffect(() => {

@@ -40,7 +40,7 @@ export default function RoomPage({
       }}
     >
       <ClientSideSuspense fallback={<Loading />}>
-        {() => <Room hostId={hostId} />}
+        {() => <Room id={id} hostId={hostId} />}
       </ClientSideSuspense>
     </RoomProvider>
   );
