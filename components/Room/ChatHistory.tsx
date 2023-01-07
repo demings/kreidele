@@ -1,23 +1,14 @@
 import { nanoid } from "nanoid";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { useEventListener } from "../../liveblocks.config";
-import { EventType, Message } from "../../shared/types";
+import { useEffect, useRef } from "react";
+import { Message } from "../../shared/types";
 import { ChatMessages } from "./ChatMessages";
 
 interface ChatHistoryProps {
   messages: Message[];
-  setMessages: Dispatch<SetStateAction<Message[]>>;
 }
 
-export function ChatHistory({ messages, setMessages }: ChatHistoryProps) {
+export function ChatHistory({ messages }: ChatHistoryProps) {
   const bottomRef = useRef();
-
-  useEventListener(({ event }) => {
-    console.log({ event });
-    if ((event as any).type === EventType.Message) {
-      setMessages((messages) => [...messages, (event as any).message]);
-    }
-  });
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change

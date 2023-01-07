@@ -57,6 +57,7 @@ const Landing = ({
     const data = {
       name: roomCreationConfiguration.name,
       private: roomCreationConfiguration.private,
+      hostId: avatarUrl,
     };
     const response = await fetch("/api/room/", {
       method: "POST",
@@ -70,9 +71,6 @@ const Landing = ({
       setShowError(false);
       router.push(`room/${responseAnswer.success.id}`);
     }
-
-    // return response.json();
-    // router.push(`room/${removeAccents(roomCreationConfiguration.name)}`);
   };
 
   return (
@@ -204,7 +202,7 @@ const Landing = ({
                 <ArrowPathIcon
                   className="animate-spin h-6 w-6 inline -mt-1"
                   viewBox="0 0 24 24"
-                />{" "}
+                />
                 KURIAMAS KAMBARYS
               </label>
             </button>

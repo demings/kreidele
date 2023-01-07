@@ -11,28 +11,29 @@
   "dependencies": {
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
-    "@liveblocks/client": "^0.19.1",
-    "@liveblocks/node": "^0.19.1",
-    "@liveblocks/react": "^0.19.1",
+    "@liveblocks/client": "^0.19.4",
+    "@liveblocks/node": "^0.19.4",
+    "@liveblocks/react": "^0.19.4",
     "cookies-next": "^2.1.1",
     "cors": "^2.8.5",
-    "framer-motion": "^7.10.2",
-    "nanoid": "^3.1.25",
+    "framer-motion": "^8.2.4",
+    "nanoid": "^4.0.0",
     "next": "^12.1.6",
     "next-absolute-url": "^1.2.2",
-    "perfect-freehand": "^0.5.3",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "perfect-freehand": "^1.2.0",
+    "random-words": "^1.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "remove-accents": "^0.4.4"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
-    "@types/node": "^14.14.31",
-    "@types/react": "^18.0.8",
-    "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.13",
-    "prettier": "^2.6.2",
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.0.26",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.2",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.6.4"
+    "typescript": "^4.9.4"
   }
 }

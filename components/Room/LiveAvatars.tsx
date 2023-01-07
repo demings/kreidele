@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useOthersMapped, useSelf } from "../../liveblocks.config";
-import { UserInfoCookie } from "../../shared/types";
+import { UserMeta, UsersMapped } from "../../liveblocks.config";
 import { Avatar } from "./Avatar";
 
 /**
@@ -30,19 +29,13 @@ const avatarProps = {
   size: 48,
 };
 
-export function LiveAvatars() {
-  //
-  // RATIONALE:
-  // Using useOthersMapped here and only selecting/subscribing to the "info"
-  // part of each user, which is static data that won't change (unlike
-  // presence). In this example we don't use presence, but in a real app this
-  // makes a difference: if we did not use a selector function here, these
-  // avatars would get needlessly re-rendered any time any of the others moved
-  // their cursors :)
-  //
-  const others = useOthersMapped((other) => other.info);
-  const currentUser = useSelf();
-
+export function LiveAvatars({
+  currentUser,
+  others,
+}: {
+  currentUser: UserMeta;
+  others: UsersMapped;
+}) {
   return (
     <div
       style={{
@@ -57,14 +50,14 @@ export function LiveAvatars() {
         {others.map(([key, info]) => {
           return (
             <motion.div key={key} {...animationProps}>
-              <AvatarFromInfo info={info as any as UserInfoCookie} />
+              <AvatarFromInfo info={info} />
             </motion.div>
           );
         })}
 
         {currentUser ? (
           <motion.div key="you" {...animationProps}>
-            <AvatarFromInfo info={currentUser.info as any as UserInfoCookie} />
+            <AvatarFromInfo info={currentUser} />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -72,7 +65,7 @@ export function LiveAvatars() {
   );
 }
 
-const AvatarFromInfo = ({ info }: { info: UserInfoCookie }) => {
+const AvatarFromInfo = ({ info }: { info: UserMeta }) => {
   const { username, avatarUrl } = info;
   return <Avatar {...avatarProps} username={username} avatarUrl={avatarUrl} />;
 };

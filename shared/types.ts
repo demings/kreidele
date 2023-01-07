@@ -28,6 +28,7 @@ export type Message = {
 
 export enum EventType {
   Message,
+  GameStateUpdate,
 }
 
 export type Layer = RectangleLayer | EllipseLayer | PathLayer;

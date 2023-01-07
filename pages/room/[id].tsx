@@ -1,21 +1,30 @@
 import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
-import { Canvas } from "../../components/Room/Canvas/Canvas";
-import { ChatHistory } from "../../components/Room/ChatHistory";
-import { GuessInput } from "../../components/Room/GuessInput";
-import { LiveAvatars } from "../../components/Room/LiveAvatars";
+import { Room } from "../../components/Room/Room";
 import { RoomProvider } from "../../liveblocks.config";
-import { Layer, Message } from "../../shared/types";
+import { liveblocksApiKey, liveblocksUrl } from "../../shared/constants";
+import { Layer } from "../../shared/types";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return { props: { id: context.query.id } };
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const response = await fetch(`${liveblocksUrl}/rooms/${query.id}`, {
+    headers: {
+      Authorization: `Bearer ${liveblocksApiKey}`,
+    },
+  });
+
+  const result = await response.json();
+
+  return { props: { id: query.id, hostId: result.metadata.hostId } };
 };
 
-export default function RoomPage({ id }: { id: string }) {
-  const [messages, setMessages] = useState<Message[]>([]);
-
+export default function RoomPage({
+  id,
+  hostId,
+}: {
+  id: string;
+  hostId: string;
+}) {
   return (
     <RoomProvider
       id={id}
@@ -31,24 +40,7 @@ export default function RoomPage({ id }: { id: string }) {
       }}
     >
       <ClientSideSuspense fallback={<Loading />}>
-        {() => (
-          <div className="flex justify-center">
-            <div className="grid h-screen place-items-center">
-              <div className="w-96 shadow-md grid grid-rows-flow grid-cols-1">
-                <div className="col-span-2 rounded-t-md bg-slate-100 w-96 max-h-60 overflow-y-scroll">
-                  <ChatHistory messages={messages} setMessages={setMessages} />
-                </div>
-                <div className="bg-white  border-b">
-                  <LiveAvatars />
-                </div>
-                <Canvas messages={messages} />
-                <div className="border-t">
-                  <GuessInput setMessages={setMessages} />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {() => <Room hostId={hostId} />}
       </ClientSideSuspense>
     </RoomProvider>
   );

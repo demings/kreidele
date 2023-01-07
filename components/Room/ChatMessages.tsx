@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { Avatar } from "./Avatar";
 
 interface ChatMessagesProps {
@@ -16,7 +17,7 @@ export function ChatMessages({
       <div className="flex items-end">
         <div className="flex flex-col space-y-0.5 text-xs max-w-xs mx-2 order-2 items-start">
           {messages.map((message) => (
-            <div>
+            <div key={nanoid()}>
               <span
                 className={`px-4 py-2 rounded inline-block bg-white text-gray-600 border ${
                   message === messages[0] ? "rounded-t-lg" : ""

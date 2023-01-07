@@ -1,17 +1,18 @@
 import Cors from "cors";
 import { nanoid } from "nanoid";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Room } from "../../shared/types";
+import { liveblocksApiKey, liveblocksUrl } from "../../../shared/constants";
+import { Room } from "../../../shared/types";
 
 const cors = Cors({
   methods: ["POST", "GET", "HEAD"],
 });
-const API_KEY = process.env.LIVEBLOCKS_SECRET_KEY;
-const HEADER = new Headers({
-  Authorization: `Bearer ${API_KEY}`,
+
+const headers = new Headers({
+  Authorization: `Bearer ${liveblocksApiKey}`,
 });
 
-const externalURL = "https://api.liveblocks.io/v2/rooms";
+const externalURL = `${liveblocksUrl}/rooms`;
 
 function runMiddleware(
   req: NextApiRequest,
@@ -39,40 +40,46 @@ export default async function handler(
     const request = JSON.parse(req.body);
 
     const roomsList = await getRooms();
-    let found = false;
-    roomsList.data.forEach((room: Room) => {
-      if (room.metadata.name === request.name && request.private === false) {
-        found = true;
-        return;
-      }
-    });
+
+    // await deleteRooms(roomsList.data.map((room: Room) => room.id));
+
+    const found = roomsList.data.some(
+      (room: Room) =>
+        room.metadata.name == request.name && request.private == false
+    );
+
     if (found) {
       return res
         .status(406)
         .json({ success: false, message: "room already exists" });
     }
+
     const data = {
       id: nanoid(),
       defaultAccesses: ["room:write"],
       metadata: {
         name: request.name,
         private: request.private.toString(),
+        hostId: request.hostId,
       },
     };
+
     const response = await fetch(externalURL, {
       method: "POST",
       mode: "cors",
-      headers: HEADER,
+      headers,
       referrerPolicy: "no-referrer",
       body: JSON.stringify(data),
     });
-    const answer = await response.json();
-    return res.status(200).json({ success: answer });
-  } else if (req.method === "GET") {
-    const answer = await getRooms();
-    let publicRooms = answer.data.filter((el: Room) => {
-      return el.metadata.private === "false";
-    });
+
+    return res.status(200).json({ success: await response.json() });
+  }
+
+  if (req.method === "GET") {
+    const publicRooms = (await getRooms()).data.filter(
+      (room: Room) => room.metadata.private === "false"
+    );
+
     res.status(200).json({ success: publicRooms });
   } else {
     res.status(200).json({ message: "This method is not implemented" });
@@ -80,9 +87,20 @@ export default async function handler(
 }
 
 async function getRooms() {
-  const response = await fetch(externalURL, {
-    headers: HEADER,
-  });
-  const answer = await response.json();
-  return answer;
+  return (
+    await fetch(externalURL, {
+      method: "GET",
+      headers,
+    })
+  ).json();
 }
+
+// async function deleteRooms(ids: string[]) {
+//   ids.forEach(async (id) => {
+//     const result = await fetch(externalURL + "/" + id, {
+//       method: "DELETE",
+//       headers,
+//     });
+//     console.log(await result.json());
+//   });
+// }
